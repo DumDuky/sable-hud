@@ -473,10 +473,17 @@ public partial class SettingsWindow : Window
         }
     }
 
-    private void SetUpPadReset()
+    private async void SetUpPadReset()
     {
         try
         {
+            var devices = await HidHide.BuildDeviceListAsync();
+            if (devices.Count == 0)
+            {
+                Hud.Toast("Connect the controller, then set up pad reset");
+                return;
+            }
+
             var exe = Paths.ExePath;
             if (string.IsNullOrWhiteSpace(exe) ||
                 System.IO.Path.GetFileName(exe).Equals("dotnet.exe", StringComparison.OrdinalIgnoreCase))
