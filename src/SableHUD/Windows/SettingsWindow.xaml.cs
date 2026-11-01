@@ -463,6 +463,18 @@ public partial class SettingsWindow : Window
             Services.Settings.IsolateController ? "On" : "Off",
             () => _ = ToggleIsolationAsync(),
             toggle: Services.Settings.IsolateController);
+
+        if (installed)
+        {
+            AddRow("Release controller",
+                "Turns off HidHide cloaking immediately if an app cannot see the pad after a crash or a stuck state.",
+                "Release",
+                () =>
+                {
+                    HidHide.ReleaseCloakBlocking();
+                    Hud.Toast("Controller released");
+                });
+        }
     }
 
     private async Task ConnectLiMusicBridgeAsync()

@@ -13,6 +13,7 @@ public sealed class TrayService : IDisposable
     public event Action? ShowHud;
     public event Action? ToggleMini;
     public event Action? OpenSettings;
+    public event Action? ReleaseController;
     public event Action? Exit;
 
     public Func<bool>? MiniChecked { get; set; }
@@ -39,6 +40,9 @@ public sealed class TrayService : IDisposable
         var autostart = new WinForms.ToolStripMenuItem("Start with Windows");
         autostart.Click += (_, _) => AutostartChecked?.Invoke();
 
+        var release = new WinForms.ToolStripMenuItem("Release controller");
+        release.Click += (_, _) => ReleaseController?.Invoke();
+
         var exit = new WinForms.ToolStripMenuItem("Exit Sable");
         exit.Click += (_, _) => Exit?.Invoke();
 
@@ -47,6 +51,7 @@ public sealed class TrayService : IDisposable
         _menu.Items.Add(settings);
         _menu.Items.Add(new WinForms.ToolStripSeparator());
         _menu.Items.Add(autostart);
+        _menu.Items.Add(release);
         _menu.Items.Add(new WinForms.ToolStripSeparator());
         _menu.Items.Add(exit);
 

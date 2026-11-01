@@ -88,6 +88,8 @@ Windows sends controller input to every app. If a game reacts while the HUD is o
 
 HidHide filters new device opens, so it isolates apps that open the controller **after** the HUD is up. An app or browser page that already held the pad keeps it until it restarts or reloads; reloading the page is enough. Sable re-reads the controller devices every time the HUD opens, and a guard releases the cloak within three seconds if the HUD is hidden.
 
+If the pad is ever stuck hidden, the tray menu has **Release controller** and Settings → General has the same action. Exiting Sable releases the cloak even when the HUD was open.
+
 A device-restart reset is not offered: on this Windows build `pnputil` cannot restart the USB composite or XUSB interfaces, and the attempt flashed a console and disrupted detection. The HID/XUSB hiding and the guard are what ship.
 
 ## Controls

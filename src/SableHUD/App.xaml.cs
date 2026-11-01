@@ -300,6 +300,11 @@ public partial class App : Application
         _tray.ShowHud += () => OnUi(() => ShowHud(null));
         _tray.ToggleMini += () => OnUi(ToggleMini);
         _tray.OpenSettings += () => OnUi(() => OpenSettings());
+        _tray.ReleaseController += () => OnUi(() =>
+        {
+            HidHide.ReleaseCloakBlocking();
+            _tray?.Balloon("Controller released", "HidHide cloaking is off");
+        });
         _tray.Exit += () => OnUi(ExitApp);
     }
 
@@ -578,7 +583,7 @@ public partial class App : Application
 
         if (Services.Settings.IsolateController && HidHide.IsInstalled)
         {
-            try { HidHide.SetCloakAsync(false).Wait(800); } catch { }
+            try { HidHide.ReleaseCloakBlocking(5000); } catch { }
         }
 
         try { Services.Media?.Dispose(); } catch { }
@@ -604,6 +609,7 @@ public partial class App : Application
     private void OnUnhandled(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         Log.Error("dispatcher: " + e.Exception);
+        try { HidHide.ReleaseCloakBlocking(1500); } catch { }
         e.Handled = true;
     }
 }

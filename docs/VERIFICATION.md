@@ -89,6 +89,10 @@ Latest published run: exit `0`, `passed=true`.
   and re-cloak the pad. The reset is removed and a 3 s guard now uncloaks whenever the
   HUD is hidden. Verified: show, hide 300 ms later, then cloak off and a fresh XInput
   reader sees the pad.
+- **Exit release**: exiting Sable while the HUD is open now runs a blocking
+  `--cloak-off` (5 s budget) instead of a fire-and-forget 800 ms wait. Verified: show
+  (`cloak=--cloak-on`), exit, process gone, `cloak=--cloak-off`, fresh XInput sees the
+  pad. The tray and Settings also offer **Release controller** for a stuck state.
 - **Output**: the Output button is part of the D-pad focus order (master → Output →
   mic → app rows), so routing no longer needs the mouse or X on a row.
 - **Mini player**: Top-right dock preset placed it correctly; Y/hotkey toggles it.

@@ -288,6 +288,32 @@ public static class HidHide
         }
     }
 
+    public static bool ReleaseCloakBlocking(int timeoutMs = 5000)
+    {
+        if (!IsInstalled) return false;
+        try
+        {
+            var info = new ProcessStartInfo(CliPath)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            info.ArgumentList.Add("--cloak-off");
+            using var process = Process.Start(info);
+            if (process is null) return false;
+            if (!process.WaitForExit(timeoutMs))
+            {
+                try { process.Kill(); } catch { }
+                return false;
+            }
+            return process.ExitCode == 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public static async Task<bool> SetCloakAsync(bool on)
     {
         if (!IsInstalled) return false;
