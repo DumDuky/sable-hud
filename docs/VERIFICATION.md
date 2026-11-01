@@ -70,17 +70,24 @@ Latest published run: exit `0`, `passed=true`.
   now-playing. Searching from the library returns to the library. The results ↔
   keyboard loop is gone.
 - **Virtual pad isolation**: Sable hides the real pad with HidHide and presents a
-  ViGEmBus Xbox 360 pad to games. With a ViGEm pad standing in for the real controller
-  (`VID_3537&PID_1098`), HidHide hid that pad, the Sable virtual pad appeared as the
-  next XInput slot, and it forwarded the real left-stick value (`20000`) while the HUD
-  was closed. With the HUD open the virtual pad reported `0` while the stand-in stayed
-  hidden. So a game using the virtual pad stops receiving input immediately, without a
-  device restart or reload. The physical pad was offline during this session, so the
-  stand-in test is the verified path; the same slot pinning and forwarding code runs
-  for the real pad.
+  ViGEmBus Xbox 360 pad to games. Verified with the physical pad (`VID_3537&PID_1098`,
+  at XInput slot 0) and with a ViGEm pad standing in for it:
+  - HUD closed: the hidden real pad is at slot 0 (`XInputGetState` → 1167 for any app
+    Sable does not allowlist) and the Sable virtual pad at slot 1 forwards the live
+    left stick (measured `12604`, `23269` while the stick rested).
+  - HUD open: the virtual pad submitted a neutral report and read `0` on every axis,
+    with the real pad still hidden. Closing the HUD restored forwarding.
+  So a game using the virtual pad stops receiving input the moment the HUD opens,
+  without a device restart, reload or console window. The browser gamepad tester
+  showed the same result once reloaded.
 - **One-time switch**: a game already running before the virtual pad appeared holds the
   real pad handle and must be restarted once. Games launched after Sable see only the
   virtual pad. The same applies to an open browser tester once.
+- **HUD focus**: opening the overlay always presents the Music tab with the cursor on
+  play/pause. `MusicView.Activate` previously restored the last used button, so a
+  search left the cursor on **Browse LiMusic**. It now resets to `PlayButton`; with no
+  track loaded it still falls back to **Browse LiMusic**, which is the only useful
+  action there.
 - **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
   medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
   keep the player's capitalisation, and stat values use tabular figures.

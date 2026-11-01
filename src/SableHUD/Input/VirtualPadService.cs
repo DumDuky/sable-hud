@@ -46,15 +46,23 @@ public sealed class VirtualPadService : IDisposable
 
     public void SetForwarding(bool forward)
     {
-        Forwarding = forward;
-        if (!forward) Neutral();
+        lock (_gate)
+        {
+            Forwarding = forward;
+            if (!forward) NeutralLocked();
+        }
+
+        Log.Info("virtual pad forwarding=" + forward);
     }
 
     public void Submit(PadState state)
     {
-        if (!IsReady || !Forwarding || _pad is null) return;
+        if (!IsReady || _pad is null) return;
         lock (_gate)
         {
+            // Check inside the lock: a tick that raced the HUD opening must not
+            // overwrite the neutral report with the last real-pad state.
+            if (!Forwarding) return;
             try
             {
                 _pad.SetButtonsFull(state.Buttons);
@@ -76,22 +84,27 @@ public sealed class VirtualPadService : IDisposable
 
     public void Neutral()
     {
+        lock (_gate) NeutralLocked();
+    }
+
+    private void NeutralLocked()
+    {
         if (_pad is null) return;
-        lock (_gate)
+        try
         {
-            try
-            {
-                _pad.SetButtonsFull(0);
-                _pad.SetAxisValue(Xbox360Axis.LeftThumbX, 0);
-                _pad.SetAxisValue(Xbox360Axis.LeftThumbY, 0);
-                _pad.SetAxisValue(Xbox360Axis.RightThumbX, 0);
-                _pad.SetAxisValue(Xbox360Axis.RightThumbY, 0);
-                _pad.SetSliderValue(Xbox360Slider.LeftTrigger, 0);
-                _pad.SetSliderValue(Xbox360Slider.RightTrigger, 0);
-                _pad.SubmitReport();
-                _lastSubmit = Environment.TickCount64;
-            }
-            catch { }
+            _pad.SetButtonsFull(0);
+            _pad.SetAxisValue(Xbox360Axis.LeftThumbX, 0);
+            _pad.SetAxisValue(Xbox360Axis.LeftThumbY, 0);
+            _pad.SetAxisValue(Xbox360Axis.RightThumbX, 0);
+            _pad.SetAxisValue(Xbox360Axis.RightThumbY, 0);
+            _pad.SetSliderValue(Xbox360Slider.LeftTrigger, 0);
+            _pad.SetSliderValue(Xbox360Slider.RightTrigger, 0);
+            _pad.SubmitReport();
+            _lastSubmit = Environment.TickCount64;
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("virtual pad neutral: " + ex.Message);
         }
     }
 

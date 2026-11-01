@@ -146,7 +146,9 @@ public partial class MusicView : HudPageBase
         }
         else
         {
-            base.Activate();
+            // Opening the HUD always lands on play/pause, never on whatever
+            // button the previous visit left behind.
+            SetCursor(PlayButton);
         }
     }
 
