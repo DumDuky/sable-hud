@@ -76,24 +76,19 @@ Latest published run: exit `0`, `passed=true`.
   connected after the setting was enabled is picked up.
   Already-open apps keep the handle they hold: an open hardwaretester page kept the
   pad, while reloading that page with the HUD open dropped it to “Connect gamepad”.
-  This is HidHide filtering new device opens, not Sable. **Automatic pad reset** is
-  installed and the task runs (Last Result 0); the protected script now restarts the
-  USB composite parent first, then HID and XUSB, and logs to `%TEMP%\sable-pad-reset.log`.
-  On this machine the HID gamepad restarted (`14:08:27`), but the parent and XUSB
-  returned `Device is pending system reboot to complete a previous operation` and
-  `This command is not supported on this OS product`; `PendingFileRenameOperations`
-  contains `gamingservicesproxy_13.dll` and `WRP3D09.tmp`. The XUSB path is the one
-  the tester uses, so the browser kept its handle. A reboot is required before the
-  reset can restart the parent/XUSB; if the same “not supported” message persists
-  after that, the reset needs a SetupAPI/devcon implementation instead of pnputil.
+  This is HidHide filtering new device opens, not Sable. An **automatic pad reset**
+  was tried and removed: on this Windows build `pnputil` restarts the HID gamepad but
+  returns “not supported on this OS product” for the USB composite parent and XUSB,
+  so the tester kept its handle, and the scheduled `cmd` flashed a console on every
+  open. The task was deleted. A supported reset needs SetupAPI/devcon and is not in
+  this build.
 - **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
   medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
   keep the player's capitalisation, and stat values use tabular figures.
-- **Permanent cloak fixed**: the automatic reset could finish after the HUD had
-  closed and re-cloak the pad, leaving it hidden from every app except Sable. The
-  reset now re-cloaks only if the HUD is still open, and a 3 s guard uncloaks whenever
-  the HUD is hidden. Verified: show, hide 300 ms later, then cloak off and a fresh
-  XInput reader sees the pad.
+- **Cloak guard**: a previous automatic reset could finish after the HUD had closed
+  and re-cloak the pad. The reset is removed and a 3 s guard now uncloaks whenever the
+  HUD is hidden. Verified: show, hide 300 ms later, then cloak off and a fresh XInput
+  reader sees the pad.
 - **Output**: the Output button is part of the D-pad focus order (master → Output →
   mic → app rows), so routing no longer needs the mouse or X on a row.
 - **Mini player**: Top-right dock preset placed it correctly; Y/hotkey toggles it.

@@ -107,7 +107,7 @@ public static class HidHide
                 return (false, "Run the packaged SableHUD.exe so the driver can allowlist it");
 
             var devices = await BuildDeviceListAsync().ConfigureAwait(false);
-            var args = new List<string> { "--app-reg", exe, "--app-reg", Pnputil, "--inv-off", "--cloak-off" };
+            var args = new List<string> { "--app-reg", exe, "--inv-off", "--cloak-off" };
             foreach (var device in devices)
             {
                 args.Add("--dev-hide");
@@ -273,7 +273,7 @@ public static class HidHide
         if (item.TryGetProperty("present", out var present) && present.ValueKind == JsonValueKind.False)
             return;
 
-        foreach (var name in new[] { "deviceInstancePath", "xusbDeviceInstancePath", "baseContainerDeviceInstancePath" })
+        foreach (var name in new[] { "deviceInstancePath", "xusbDeviceInstancePath" })
         {
             if (!item.TryGetProperty(name, out var value)) continue;
             var path = value.GetString();

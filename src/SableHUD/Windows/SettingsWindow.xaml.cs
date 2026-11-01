@@ -463,46 +463,6 @@ public partial class SettingsWindow : Window
             Services.Settings.IsolateController ? "On" : "Off",
             () => _ = ToggleIsolationAsync(),
             toggle: Services.Settings.IsolateController);
-
-        if (installed)
-        {
-            AddRow("Automatic pad reset",
-                "Restarts the controller when the HUD opens, so apps that were already running lose the old handle. One Windows admin prompt to set up; after that it happens on every open.",
-                HidHide.PadResetTaskExists() ? "On" : "Set up",
-                SetUpPadReset);
-        }
-    }
-
-    private async void SetUpPadReset()
-    {
-        try
-        {
-            var devices = await HidHide.BuildDeviceListAsync();
-            if (devices.Count == 0)
-            {
-                Hud.Toast("Connect the controller, then set up pad reset");
-                return;
-            }
-
-            var exe = Paths.ExePath;
-            if (string.IsNullOrWhiteSpace(exe) ||
-                System.IO.Path.GetFileName(exe).Equals("dotnet.exe", StringComparison.OrdinalIgnoreCase))
-            {
-                Hud.Toast("Run the packaged SableHUD.exe to set this up");
-                return;
-            }
-
-            Process.Start(new ProcessStartInfo(exe, "--install-pad-reset")
-            {
-                UseShellExecute = true,
-                Verb = "runas",
-            });
-            Hud.Toast("Approve the Windows prompt, then reopen Settings");
-        }
-        catch
-        {
-            Hud.Toast("Pad reset setup was cancelled");
-        }
     }
 
     private async Task ConnectLiMusicBridgeAsync()
@@ -533,7 +493,6 @@ public partial class SettingsWindow : Window
             Services.Settings.IsolateController = true;
             Services.Save();
             Hud.Toast(message + " · Reload apps that were already open");
-            if (!HidHide.PadResetTaskExists()) SetUpPadReset();
         }
         else
         {
