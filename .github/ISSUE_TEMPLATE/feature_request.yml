@@ -1,0 +1,37 @@
+name: Feature request
+description: A small, specific addition that fits a controller-first HUD
+title: "[idea] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Sable is deliberately small. The best ideas remove a step, not add a screen.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is awkward today
+      description: Describe the moment, not the implementation
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you would like
+    validations:
+      required: true
+
+  - type: textarea
+    id: controller
+    attributes:
+      label: How it should work on a pad
+      description: Which button opens it, how you move, how you back out
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

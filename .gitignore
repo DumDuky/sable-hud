@@ -1,0 +1,20 @@
+# build output
+bin/
+obj/
+.vs/
+*.user
+*.suo
+dist/
+
+# local LiMusic checkout (separate GPL project, not part of this repository)
+limusic/
+
+# local test and recording output
+*.log
+sable-selftest.json
+unslop-story/
+*.mp4
+
+# OS noise
+Thumbs.db
+.DS_Store

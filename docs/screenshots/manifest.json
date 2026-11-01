@@ -1,0 +1,21 @@
+{
+  "app": "SableHUD",
+  "generated": "2026-11-01T01:34:06.9777912-05:00",
+  "note": "Design render with representative data (demo track / synthetic telemetry).",
+  "width": 940,
+  "height": 404,
+  "files": [
+    "hud-music.png",
+    "hud-performance.png",
+    "hud-audio.png",
+    "hud-tools.png",
+    "mini-player.png",
+    "toast.png",
+    "settings-general.png",
+    "settings-widgets.png",
+    "settings-appearance.png",
+    "settings-about.png",
+    "settings-appearance-ivory.png",
+    "hud-music-ivory.png"
+  ]
+}

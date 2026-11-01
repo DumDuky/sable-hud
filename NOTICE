@@ -1,0 +1,49 @@
+Sable HUD
+Copyright (C) 2026 Sable HUD contributors
+
+This program is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this
+program. If not, see <https://www.gnu.org/licenses/>.
+
+--------------------------------------------------------------------------
+Third-party notices
+--------------------------------------------------------------------------
+
+LiMusic — https://github.com/SimoHypers/limusic
+Copyright (C) SimoHypers and contributors. Licensed GPL-3.0.
+
+Sable HUD's Music widget links to a separately installed LiMusic through
+LiMusic's own local command interface. Sable starts LiMusic with a loopback-only
+WebView2 DevTools port and calls the same typed commands LiMusic's own interface
+uses, alongside LiMusic's Windows media session. No LiMusic source code is included
+in this repository or binary, and LiMusic is not bundled. LiMusic is a separate
+GPL-3.0 application.
+
+NAudio — https://github.com/naudio/NAudio
+Copyright (C) Mark Heath and contributors. MIT License. Used for Core Audio
+enumeration/volume and Media Foundation file playback.
+
+TagLib# — https://github.com/mono/taglib-sharp
+Copyright (C) TagLib# contributors. GNU LGPL-2.1. Used to read local music tags
+and embedded artwork.
+
+WinAudioRoute — https://github.com/kunkunkunQoQ/WinAudioRoute
+MIT License. Used for per-app audio output routing through the Windows
+AudioPolicyConfig API. The API is undocumented by Microsoft and is probed at
+runtime; Sable falls back to the Windows mixer if a build does not support it.
+
+HidHide — https://github.com/nefarius/HidHide
+Copyright (C) 2020 Eric Korff de Gidts, 2021-2024 Benjamin Höglinger-Stelzer.
+MIT License. Optional controller isolation driver. The installer is bundled at
+drivers\HidHide_1.5.230_x64.exe and is only launched from Settings when the
+user chooses to install it. It is not required by Sable.
+
+Windows APIs — XInput, Core Audio, PDH and SMTC are provided by Microsoft Windows.
+Sable HUD is not affiliated with Microsoft, Discord, Spotify or YouTube.

@@ -1,0 +1,102 @@
+name: Bug report
+description: Something in Sable does not behave the way it should
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The self-test report and the log make most bugs
+        reproducible; both are local files and neither contains account data.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: The actual behaviour, in plain words
+      placeholder: Pressing X on a LiMusic session opened the picker for the wrong app.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the HUD with the Guide button
+        2. Go to Audio
+        3. Focus the second session
+        4. Press X
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Sable version
+      description: Shown at the bottom right of the HUD, or the release tag you downloaded
+      placeholder: 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: How it was installed
+      options:
+        - SableHUD.exe from the portable zip
+        - Framework-dependent build
+        - Built from source
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2, build 26100
+    validations:
+      required: true
+
+  - type: input
+    id: controller
+    attributes:
+      label: Controller
+      description: Model and connection (USB, Xbox wireless, dongle)
+      placeholder: Xbox Series controller, wireless dongle
+
+  - type: dropdown
+    id: limusic
+    attributes:
+      label: LiMusic
+      options:
+        - Installed and linked
+        - Installed but not linked
+        - Not installed
+        - Not relevant to this bug
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log and self-test report
+      description: Paste the tail of `%APPDATA%\SableHUD\sable.log`, or attach the self-test JSON
+      render: text
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: Game Bar's controller shortcut is turned off
+        - label: I am not using exclusive fullscreen
+        - label: I searched existing issues for the same problem
+          required: true

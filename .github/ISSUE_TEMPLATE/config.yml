@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Install and controller setup
+    url: https://github.com/DumDuky/sable-hud#install
+    about: Requirements, SmartScreen, the Guide button and Game Bar
+  - name: Music and LiMusic
+    url: https://github.com/DumDuky/sable-hud#music-setup
+    about: Linking LiMusic, the loopback bridge and the SMTC fallback
+  - name: Notes and limits
+    url: https://github.com/DumDuky/sable-hud#notes-and-limits
+    about: Fullscreen, RTSS, topics with known behaviour
