@@ -89,6 +89,11 @@ Latest published run: exit `0`, `passed=true`.
 - **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
   medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
   keep the player's capitalisation, and stat values use tabular figures.
+- **Permanent cloak fixed**: the automatic reset could finish after the HUD had
+  closed and re-cloak the pad, leaving it hidden from every app except Sable. The
+  reset now re-cloaks only if the HUD is still open, and a 3 s guard uncloaks whenever
+  the HUD is hidden. Verified: show, hide 300 ms later, then cloak off and a fresh
+  XInput reader sees the pad.
 - **Output**: the Output button is part of the D-pad focus order (master → Output →
   mic → app rows), so routing no longer needs the mouse or X on a row.
 - **Mini player**: Top-right dock preset placed it correctly; Y/hotkey toggles it.

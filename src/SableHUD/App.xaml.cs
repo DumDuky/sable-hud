@@ -22,6 +22,8 @@ public partial class App : Application
 
     private readonly System.Threading.SemaphoreSlim _isolationGate = new(1, 1);
     private bool _isolationHintShown;
+    private DispatcherTimer? _cloakGuard;
+    private bool _cloakGuardBusy;
     private OverlayWindow? _overlay;
     private MiniPlayerWindow? _mini;
     private ToastWindow? _toast;
@@ -172,6 +174,24 @@ public partial class App : Application
 
         _mini = new MiniPlayerWindow();
         _toast = new ToastWindow();
+
+        // Safety net: never leave the controller cloaked with no HUD open.
+        _cloakGuard = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(3) };
+        _cloakGuard.Tick += async (_, _) =>
+        {
+            if (_cloakGuardBusy || _overlay?.IsShown == true) return;
+            if (!Services.Settings.IsolateController || !HidHide.IsInstalled) return;
+            _cloakGuardBusy = true;
+            try
+            {
+                if (await HidHide.IsCloakedAsync().ConfigureAwait(true))
+                    await HidHide.SetCloakAsync(false).ConfigureAwait(true);
+            }
+            catch (Exception ex) { Log.Warn("cloak guard: " + ex.Message); }
+            finally { _cloakGuardBusy = false; }
+        };
+        _cloakGuard.Start();
+
         Services.Cover.Changed += () => OnUi(() =>
         {
             _mini?.Refresh();
@@ -425,6 +445,15 @@ public partial class App : Application
             {
                 await HidHide.SetCloakAsync(true).ConfigureAwait(true);
                 var restarted = await HidHide.RunPadResetAsync().ConfigureAwait(true);
+
+                // The reset takes about a second. If the HUD was hidden while it
+                // ran, do not re-cloak: that left the pad hidden with no HUD open.
+                if (_overlay?.IsShown != true)
+                {
+                    await HidHide.SetCloakAsync(false).ConfigureAwait(true);
+                    return;
+                }
+
                 if (restarted)
                     await HidHide.SetCloakAsync(true).ConfigureAwait(true);
 
@@ -575,6 +604,7 @@ public partial class App : Application
         try { _tray?.Dispose(); } catch { }
         try { _overlay?.Close(); } catch { }
         try { _mini?.Close(); } catch { }
+        _cloakGuard?.Stop();
         try { _toast?.Close(); } catch { }
 
         if (Services.Settings.IsolateController && HidHide.IsInstalled)
