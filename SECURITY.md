@@ -12,8 +12,8 @@ security problem.
 
 - **LiMusic bridge.** While a music widget is linked, LiMusic runs with WebView2's
   DevTools port bound to `127.0.0.1`. Local processes that already run as your user
-  can reach that port, exactly as they can reach LiMusic's own UI. Sable closes the
-  link when it is not in use and never binds the port to a network interface.
+  can reach that port, exactly as they can reach LiMusic's own UI. The port lives as
+  long as the linked LiMusic process and is never bound to a network interface.
 - **Audio routing.** Per-app output uses an undocumented Windows API, capability
   probed at runtime. It only changes the audio route of the process you select.
 - **HidHide.** The optional driver hides the physical controller from other apps

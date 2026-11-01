@@ -120,7 +120,7 @@ Sable talks to LiMusic, a separate GPL-3.0 app by [SimoHypers](https://github.co
 
 - The HUD starts LiMusic with WebView2's **loopback-only** DevTools port and calls LiMusic's own typed commands over `127.0.0.1:9222`. Search, playlists, artwork, queue and playback are real LiMusic operations, not a lookalike index.
 - If LiMusic is already open without the link, Sable asks before restarting it once, then minimizes it.
-- The port is local to your machine and closed when the link is not in use. It is the same trust boundary as any local media app.
+- The port is loopback-only and lives as long as the linked LiMusic process. It is never bound to a network interface.
 - If the bridge is unavailable, the HUD still reads and controls any Windows media session through SMTC, including LiMusic.
 
 LiMusic is not bundled with Sable and its source is not in this repository. See [NOTICE](NOTICE).
