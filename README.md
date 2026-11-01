@@ -65,6 +65,11 @@ A controller-sized browser for your signed-in LiMusic library. Open playlists, s
 
 CPU, GPU, VRAM, RAM, network, foreground app, session time, battery, controller battery and optional RTSS FPS. One page, no graphs you have to decode.
 
+<p align="center">
+  <img src="docs/screenshots/hud-performance.png" alt="Sable HUD performance page" width="100%">
+</p>
+<p align="center"><sub>Design render, representative telemetry.</sub></p>
+
 ### Audio
 
 Master volume, microphone mute, a per-app mixer and per-app output routing through the same Windows route store as the system volume mixer. Discord is sorted first. On any volume row, left/right changes the level; A mutes; X opens the output picker.
