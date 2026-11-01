@@ -12,7 +12,7 @@
     <PathGeometry x:Key="IconMusic" Figures="M12,3 V13.55 C11.41,13.21 10.73,13 10,13 7.79,13 6,14.79 6,17 6,19.21 7.79,21 10,21 12.21,21 14,19.21 14,17 V7 H18 V3 Z" />
     <PathGeometry x:Key="IconPerf" Figures="M4,17 H7 V20 H4 Z M8.5,12 H11.5 V20 H8.5 Z M13,7 H16 V20 H13 Z" />
     <PathGeometry x:Key="IconVolume" Figures="M3,9 V15 H7 L12,20 V4 L7,9 Z M16.5,12 C16.5,10.23 15.5,8.71 14,7.97 V16.02 C15.5,15.29 16.5,13.77 16.5,12 Z M14,3.23 V5.29 C16.89,6.15 19,8.83 19,12 C19,15.17 16.89,17.85 14,18.71 V20.77 C18,19.86 21,16.28 21,12 C21,7.72 18,4.14 14,3.23 Z" />
-    <PathGeometry x:Key="IconVolumeMute" Figures="M3,9 V15 H7 L12,20 V4 L7,9 Z M16.5,12 C16.5,10.23 15.5,8.71 14,7.97 V10.18 L16.45,12.63 C16.48,12.43 16.5,12.22 16.5,12 Z M19,12 C19,12.94 18.8,13.82 18.46,14.64 L19.97,16.15 C20.63,14.91 21,13.5 21,12 C21,7.72 18,4.14 14,3.23 V5.29 C16.89,6.15 19,8.83 19,12 Z M4.27,3 L3,4.27 7.73,9 H3 V15 H7 L12,20 V13.27 L16.25,17.53 C15.58,18.04 14.83,18.44 14,18.7 V20.77 C15.38,20.45 16.63,19.82 17.68,18.96 L19.73,21 21,19.73 4.27,3 Z" />
+    <PathGeometry x:Key="IconVolumeMute" Figures="M3,9 V15 H7 L12,20 V4 L7,9 Z M4.6,3.2 L3.2,4.6 L19.4,20.8 L20.8,19.4 Z" />
     <PathGeometry x:Key="IconMic" Figures="M12,14 C13.66,14 15,12.66 15,11 V5 C15,3.34 13.66,2 12,2 C10.34,2 9,3.34 9,5 V11 C9,12.66 10.34,14 12,14 Z M17,11 C17,13.76 14.76,16 12,16 C9.24,16 7,13.76 7,11 H5 C5,14.53 7.61,17.43 11,17.92 V21 H13 V17.92 C16.39,17.43 19,14.53 19,11 Z" />
     <PathGeometry x:Key="IconMicOff" Figures="M12,14 C13.66,14 15,12.66 15,11 V5 C15,3.34 13.66,2 12,2 C10.34,2 9,3.34 9,5 V11 C9,12.66 10.34,14 12,14 Z M17,11 C17,13.76 14.76,16 12,16 C9.24,16 7,13.76 7,11 H5 C5,14.53 7.61,17.43 11,17.92 V21 H13 V17.92 C16.39,17.43 19,14.53 19,11 Z M4.6,2.8 L2.8,4.6 L19.4,21.2 L21.2,19.4 Z" />
     <PathGeometry x:Key="IconGrid" Figures="M4,4 H11 V11 H4 Z M13,4 H20 V11 H13 Z M4,13 H11 V20 H4 Z M13,13 H20 V20 H13 Z" />
@@ -55,7 +55,7 @@
 
     <Style x:Key="Heading" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI" />
-        <Setter Property="FontSize" Value="19" />
+        <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="{DynamicResource Text}" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -68,12 +68,12 @@
     </Style>
 
     <Style x:Key="Dim" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="FontSize" Value="13" />
         <Setter Property="Foreground" Value="{DynamicResource TextDim}" />
     </Style>
 
     <Style x:Key="Micro" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontSize" Value="11" />
         <Setter Property="FontWeight" Value="Medium" />
         <Setter Property="Foreground" Value="{DynamicResource TextDim}" />
         <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
@@ -81,7 +81,7 @@
 
     <Style x:Key="StatValue" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI" />
-        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="{DynamicResource Text}" />
         <Setter Property="Typography.NumeralAlignment" Value="Tabular" />
@@ -120,7 +120,7 @@
         <Setter Property="Padding" Value="14,0" />
         <Setter Property="Height" Value="38" />
         <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI" />
-        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="FontSize" Value="13" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -136,7 +136,7 @@
                                 Margin="-4"
                                 CornerRadius="{TemplateBinding CornerRadius}"
                                 BorderBrush="{DynamicResource CursorRing}"
-                                BorderThickness="1.5"
+                                BorderThickness="1"
                                 Opacity="0"
                                 IsHitTestVisible="False" />
                         <Border x:Name="Bg"
@@ -183,7 +183,7 @@
                         <Trigger Property="IsCursor" Value="True">
                             <Setter TargetName="Halo" Property="Opacity" Value="1" />
                             <Setter TargetName="Bg" Property="Background" Value="{DynamicResource CursorBg}" />
-
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -206,6 +206,10 @@
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Accent}" />
                         </MultiTrigger>
+                        <Trigger Property="QuietActive" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Raised}" />
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{DynamicResource StrokeStrong}" />
+                        </Trigger>
                         <Trigger Property="IsActive" Value="True">
                             <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Accent}" />
                             <Setter Property="Foreground" Value="{DynamicResource OnAccent}" />
@@ -220,6 +224,20 @@
     </Style>
 
     <!-- ============================ scrollbar ============================ -->
+    <Style x:Key="QuietNav" TargetType="{x:Type hud:HudButton}" BasedOn="{StaticResource {x:Type hud:HudButton}}">
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Style.Triggers>
+            <Trigger Property="QuietActive" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource Text}" />
+                <Setter Property="Background" Value="{DynamicResource Raised}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeStrong}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="SlimScrollBar" TargetType="ScrollBar">
         <Setter Property="Width" Value="6" />
         <Setter Property="Background" Value="Transparent" />

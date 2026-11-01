@@ -96,14 +96,15 @@ public partial class OverlayWindow : Window
             var button = new HudButton
             {
                 Height = 28,
-                CornerRadius = new CornerRadius(9),
-                Padding = new Thickness(10, 0, 11, 0),
-                FontSize = 11,
+                CornerRadius = new CornerRadius(8),
+                Padding = new Thickness(12, 0, 12, 0),
+                FontSize = 13,
+                Style = (Style)FindResource("QuietNav"),
                 Icon = Ui.Geo(icon),
-                IconSize = 13,
-                IconMargin = new Thickness(0, 0, 6, 0),
+                IconSize = 14,
+                IconMargin = new Thickness(0, 0, 8, 0),
                 Content = title,
-                Margin = new Thickness(0, 0, 2, 0),
+                Margin = new Thickness(2, 0, 2, 0),
             };
             button.Click += (_, _) =>
             {
@@ -134,26 +135,26 @@ public partial class OverlayWindow : Window
     {
         var chip = new Border
         {
-            CornerRadius = new CornerRadius(6),
+            CornerRadius = new CornerRadius(5),
             BorderBrush = (Brush)FindResource("StrokeStrong"),
             BorderThickness = new Thickness(1),
-            Padding = new Thickness(4, 1, 4, 1),
-            Margin = new Thickness(0, 0, 5, 0),
+            Padding = new Thickness(5, 1, 5, 1),
+            Margin = new Thickness(0, 0, 4, 0),
             VerticalAlignment = VerticalAlignment.Center,
         };
         chip.Child = new TextBlock
         {
             Text = glyph,
-            FontSize = 8.5,
+            FontSize = 10,
             FontWeight = FontWeights.SemiBold,
             Foreground = (Brush)FindResource("TextMuted"),
         };
         var text = new TextBlock
         {
             Text = label,
-            FontSize = 9.5,
+            FontSize = 11,
             Foreground = (Brush)FindResource("TextMuted"),
-            Margin = new Thickness(0, 0, 12, 0),
+            Margin = new Thickness(0, 0, 18, 0),
             VerticalAlignment = VerticalAlignment.Center,
         };
         HintStrip.Children.Add(chip);
@@ -247,27 +248,21 @@ public partial class OverlayWindow : Window
         var gen = ++_generation;
         PositionNow();
         var target = Top;
-        var start = target - Height;
+        // A short rise reads calmer than dropping the whole window in, and the
+        // same curve and duration are used for every state change.
+        const double rise = 10;
         Visibility = Visibility.Visible;
         Opacity = 0;
-        Top = start;
+        Top = target - rise;
 
-        Shell.RenderTransformOrigin = new Point(0.5, 0);
-        var shellScale = new ScaleTransform(0.982, 0.982);
+        Shell.RenderTransformOrigin = new Point(0.5, 0.5);
+        var shellScale = new ScaleTransform(0.99, 0.99);
         Shell.RenderTransform = shellScale;
-        shellScale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0.982, 1, TimeSpan.FromMilliseconds(460))
-        {
-            EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseOut },
-        });
-        shellScale.BeginAnimation(ScaleTransform.ScaleYProperty, new DoubleAnimation(0.982, 1, TimeSpan.FromMilliseconds(460))
-        {
-            EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseOut },
-        });
+        var ease = new CubicEase { EasingMode = EasingMode.EaseOut };
+        shellScale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0.99, 1, TimeSpan.FromMilliseconds(240)) { EasingFunction = ease });
+        shellScale.BeginAnimation(ScaleTransform.ScaleYProperty, new DoubleAnimation(0.99, 1, TimeSpan.FromMilliseconds(240)) { EasingFunction = ease });
 
-        var drop = new DoubleAnimation(start, target, TimeSpan.FromMilliseconds(460))
-        {
-            EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseOut },
-        };
+        var drop = new DoubleAnimation(target - rise, target, TimeSpan.FromMilliseconds(260)) { EasingFunction = ease };
         drop.Completed += (_, _) =>
         {
             if (gen != _generation || !_shown) return;
@@ -276,7 +271,7 @@ public partial class OverlayWindow : Window
         };
         BeginAnimation(TopProperty, drop);
 
-        var fade = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(280));
+        var fade = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(220));
         fade.Completed += (_, _) =>
         {
             if (gen != _generation || !_shown) return;
@@ -301,8 +296,8 @@ public partial class OverlayWindow : Window
         _idle.Stop();
 
         var fromTop = Top;
-        var target = fromTop - 46;
-        var fade = new DoubleAnimation(Opacity, 0, TimeSpan.FromMilliseconds(220));
+        var target = fromTop - 10;
+        var fade = new DoubleAnimation(Opacity, 0, TimeSpan.FromMilliseconds(180));
         fade.Completed += (_, _) =>
         {
             if (gen != _generation || _shown) return;
@@ -315,9 +310,9 @@ public partial class OverlayWindow : Window
             Hidden?.Invoke();
         };
         BeginAnimation(OpacityProperty, fade);
-        BeginAnimation(TopProperty, new DoubleAnimation(fromTop, target, TimeSpan.FromMilliseconds(280))
+        BeginAnimation(TopProperty, new DoubleAnimation(fromTop, target, TimeSpan.FromMilliseconds(200))
         {
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn },
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
         });
     }
 
@@ -351,7 +346,7 @@ public partial class OverlayWindow : Window
         _index = index;
         var page = _pages[index];
         PageHost.Content = page as FrameworkElement;
-        foreach (var (key, button) in _tabs) button.IsActive = key == page.TabId;
+        foreach (var (key, button) in _tabs) button.QuietActive = key == page.TabId;
         BuildHints(page.TabId);
 
         PageHost.Opacity = 0;
@@ -394,7 +389,7 @@ public partial class OverlayWindow : Window
         }
 
         _index = index;
-        foreach (var (key, button) in _tabs) button.IsActive = key == currentId;
+        foreach (var (key, button) in _tabs) button.QuietActive = key == currentId;
         BuildHints(CurrentPage?.TabId ?? _defaultTab);
         if (_shown) CurrentPage?.Activate();
     }

@@ -14,38 +14,38 @@
         </Grid.RowDefinitions>
 
         <controls:HudButton x:Name="MasterButton"
-                            Height="76" CornerRadius="19" Padding="16,0"
+                            Height="76" CornerRadius="19" Padding="20,0"
                             Background="{DynamicResource CardBg}"
                             BorderBrush="{DynamicResource Stroke}"
                             BorderThickness="1"
                             HorizontalContentAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="188" />
+                    <ColumnDefinition Width="156" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="46" />
+                    <ColumnDefinition Width="48" />
                 </Grid.ColumnDefinitions>
 
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="System volume" Style="{StaticResource Micro}" />
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                        <TextBlock x:Name="MasterValue" Style="{StaticResource StatValue}" FontSize="26" Text="—" />
-                        <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,9,0,0" />
-                        <TextBlock x:Name="MasterState" Style="{StaticResource Dim}" Margin="10,9,0,0" Text="live" />
+                        <TextBlock x:Name="MasterValue" Style="{StaticResource StatValue}" FontSize="28" Text="—" />
+                        <TextBlock Text="%" Style="{StaticResource Dim}" Margin="4,10,0,0" />
+                        <TextBlock x:Name="MasterState" Style="{StaticResource Dim}" Margin="10,10,0,0" Text="live" />
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,4,26,0">
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,4,24,0">
                     <controls:HudProgress x:Name="MasterBar" Height="6"
                                           Track="{DynamicResource StrokeStrong}"
                                           Fill="{DynamicResource Text}" />
-                    <TextBlock x:Name="MasterHint" Text="Click to mute · ◀ ▶ volume" Style="{StaticResource Dim}" Margin="0,7,0,0" FontSize="9.8" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="MasterHint" Text="A mutes · ◀ ▶ volume" Style="{StaticResource Dim}" Margin="0,8,0,0" FontSize="11" TextTrimming="CharacterEllipsis" />
                 </StackPanel>
 
                 <Path x:Name="MasterIcon" Grid.Column="2"
                       Data="{StaticResource IconVolume}"
                       Fill="{DynamicResource Text}"
-                      Width="20" Height="20" Stretch="Uniform"
+                      Width="22" Height="22" Stretch="Uniform"
                       HorizontalAlignment="Right" VerticalAlignment="Center" />
             </Grid>
         </controls:HudButton>
@@ -54,17 +54,17 @@
             <TextBlock Text="App mixer" Style="{StaticResource Micro}" VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <controls:HudButton x:Name="OutputButton"
-                                    Height="34" CornerRadius="11" Padding="11,0" Margin="0,0,6,0"
+                                    Height="36" CornerRadius="10" Padding="12,0" Margin="0,0,8,0"
                                     Background="{DynamicResource BgSoft}"
                                     BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                                    Icon="{StaticResource IconVolume}" IconSize="14" IconMargin="0,0,8,0"
-                                    Content="Output" FontSize="11" />
+                                    Icon="{StaticResource IconVolume}" IconSize="15" IconMargin="0,0,8,0"
+                                    Content="Output" FontSize="13" />
                 <controls:HudButton x:Name="MicButton"
-                                    Height="34" CornerRadius="11" Padding="11,0"
+                                    Height="36" CornerRadius="10" Padding="12,0"
                                     Background="{DynamicResource BgSoft}"
                                     BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                                    Icon="{StaticResource IconMic}" IconSize="14" IconMargin="0,0,8,0"
-                                    Content="Mic live" FontSize="11" />
+                                    Icon="{StaticResource IconMic}" IconSize="15" IconMargin="0,0,8,0"
+                                    Content="Mic live" FontSize="13" />
             </StackPanel>
         </Grid>
 
@@ -75,8 +75,7 @@
                            Style="{StaticResource Body}"
                            Text="No apps are playing audio"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           FontSize="12" />
+                           HorizontalAlignment="Center" />
             </Grid>
         </Border>
     </Grid>

@@ -17,6 +17,7 @@ public partial class AudioView : HudPageBase
     private readonly List<HudButton> _sessionButtons = new();
     private long _lastRefresh = -10_000;
     private string _signature = "";
+    private bool _built;
 
     private Grid? _outputPanel;
     private TextBlock? _outputTitle;
@@ -111,7 +112,7 @@ public partial class AudioView : HudPageBase
         MasterValue.Text = $"{s.Master * 100:0}";
         MasterBar.Value = s.Master;
         MasterState.Text = s.MasterMuted ? "muted" : "live";
-        MasterHint.Text = "Click to mute · ◀ ▶ volume · " + s.DefaultDeviceName;
+        MasterHint.Text = "A mutes · ◀ ▶ volume · " + s.DefaultDeviceName;
         MasterHint.ToolTip = s.DefaultDeviceName;
         MasterIcon.Data = Ui.Geo(s.MasterMuted ? "IconVolumeMute" : "IconVolume");
         MicButton.Content = s.MicAvailable ? (s.MicMuted ? "Mic muted" : "Mic live") : "No mic";
@@ -119,11 +120,16 @@ public partial class AudioView : HudPageBase
         MicButton.IsEnabled = s.MicAvailable;
 
         var sig = string.Join("|", s.Sessions.Select(x => $"{x.Pid}:{x.Name}:{Math.Round(x.Volume * 100)}:{x.Muted}"));
-        if (sig == _signature)
+        // The structural build also registers the three controls with the
+        // controller nav layer. It has to run even when there is no audio
+        // session, otherwise an empty mixer leaves the page with no cursor at
+        // all and nothing on it can be reached.
+        if (_built && sig == _signature)
         {
             UpdateNumbers(s);
             return;
         }
+        _built = true;
         _signature = sig;
         BuildSessions(s);
     }
@@ -164,23 +170,23 @@ public partial class AudioView : HudPageBase
             var button = new HudButton
             {
                 Height = 34,
-                CornerRadius = new CornerRadius(9),
-                Padding = new Thickness(9, 0, 9, 0),
-                Margin = new Thickness(0, 0, 0, 3),
+                CornerRadius = new CornerRadius(10),
+                Padding = new Thickness(12, 0, 12, 0),
+                Margin = new Thickness(0, 0, 0, 4),
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
                 ToolTip = "A mutes · ◀ ▶ volume",
             };
 
             var grid = new Grid();
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(94) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(22) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(110) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(34) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(24) });
 
             var name = new TextBlock
             {
                 Text = session.Name,
-                FontSize = 11.4,
+                FontSize = 13,
                 FontWeight = FontWeights.SemiBold,
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -189,10 +195,10 @@ public partial class AudioView : HudPageBase
             var device = new TextBlock
             {
                 Text = session.DeviceName,
-                FontSize = 8.4,
+                FontSize = 11,
                 Foreground = (Brush)Application.Current.Resources["TextDim"],
                 TextTrimming = TextTrimming.CharacterEllipsis,
-                MaxWidth = 230,
+                MaxWidth = 260,
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
             var nameStack = new StackPanel { VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Stretch };
@@ -211,18 +217,18 @@ public partial class AudioView : HudPageBase
             {
                 Tag = "pct",
                 Text = $"{session.Volume * 100:0}",
-                FontSize = 9.8,
+                FontSize = 13,
                 Foreground = (Brush)Application.Current.Resources["TextDim"],
                 VerticalAlignment = VerticalAlignment.Center,
-                Width = 26,
+                Width = 34,
                 TextAlignment = TextAlignment.Right,
             };
             var mute = new System.Windows.Shapes.Path
             {
                 Data = Ui.Geo(session.Muted ? "IconVolumeMute" : "IconVolume"),
                 Fill = (Brush)Application.Current.Resources[session.Muted ? "Text" : "TextDim"],
-                Width = 13,
-                Height = 13,
+                Width = 16,
+                Height = 16,
                 Stretch = Stretch.Uniform,
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Right,
@@ -297,13 +303,13 @@ public partial class AudioView : HudPageBase
 
         _outputTitle = new TextBlock
         {
-            FontSize = 17, FontWeight = FontWeights.SemiBold,
+            FontSize = 20, FontWeight = FontWeights.SemiBold,
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming = TextTrimming.CharacterEllipsis,
         };
         _outputStatus = new TextBlock
         {
-            FontSize = 10.5,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(12, 0, 0, 0),
@@ -325,7 +331,7 @@ public partial class AudioView : HudPageBase
         var hint = new TextBlock
         {
             Text = "A routes this app · B back",
-            FontSize = 9.5,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             Margin = new Thickness(2, 0, 0, 0),
         };
@@ -381,7 +387,7 @@ public partial class AudioView : HudPageBase
             var isCurrent = device.Id == _outputCurrentDeviceId || (string.IsNullOrEmpty(device.Id) && string.IsNullOrEmpty(_outputCurrentDeviceId));
             var row = new HudButton
             {
-                Height = 30,
+                Height = 32,
                 CornerRadius = new CornerRadius(9),
                 Padding = new Thickness(10, 0, 10, 0),
                 Margin = new Thickness(0, 0, 0, 2),
@@ -396,7 +402,7 @@ public partial class AudioView : HudPageBase
             text.Children.Add(new TextBlock
             {
                 Text = device.Name,
-                FontSize = 11.5,
+                FontSize = 13,
                 FontWeight = isCurrent ? FontWeights.SemiBold : FontWeights.Normal,
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -404,7 +410,7 @@ public partial class AudioView : HudPageBase
             var mark = new TextBlock
             {
                 Text = isCurrent ? "CURRENT" : device.IsDefault ? "DEFAULT" : "",
-                FontSize = 8.5,
+                FontSize = 11,
                 Foreground = (Brush)Application.Current.Resources["TextDim"],
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(10, 0, 2, 0),

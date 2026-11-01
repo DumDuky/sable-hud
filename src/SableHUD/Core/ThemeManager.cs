@@ -19,7 +19,8 @@ public sealed record ThemeDef(
     string Accent,
     string AccentHover,
     string AccentPressed,
-    string OnAccent);
+    string OnAccent,
+    string Raised);
 
 /// <summary>
 /// Four monochrome presets. LiMusic ships colourful palettes (Catppuccin, Tokyo Night,
@@ -34,7 +35,7 @@ public static class Themes
         Stroke: "#1AFFFFFF", StrokeStrong: "#2BFFFFFF",
         Text: "#FFF7F7F8", TextMuted: "#FFA2A2AA", TextDim: "#FF70707A",
         Accent: "#FFF7F7F8", AccentHover: "#FFE4E4E9", AccentPressed: "#FFCDCDD4",
-        OnAccent: "#FF0A0A0C");
+        OnAccent: "#FF0A0A0C", Raised: "#FF1F1F25");
 
     public static readonly ThemeDef Graphite = new(
         "Graphite", "Graphite", false,
@@ -42,7 +43,7 @@ public static class Themes
         Stroke: "#1AFFFFFF", StrokeStrong: "#2EFFFFFF",
         Text: "#FFF3F3F5", TextMuted: "#FFA7A9B1", TextDim: "#FF767983",
         Accent: "#FFF5F5F7", AccentHover: "#FFE2E3E7", AccentPressed: "#FFCBCDD4",
-        OnAccent: "#FF121316");
+        OnAccent: "#FF121316", Raised: "#FF2C2F35");
 
     public static readonly ThemeDef Ivory = new(
         "Ivory", "Ivory", true,
@@ -50,7 +51,7 @@ public static class Themes
         Stroke: "#1A171614", StrokeStrong: "#2E171614",
         Text: "#FF171614", TextMuted: "#FF585550", TextDim: "#FF6F6B63",
         Accent: "#FF171614", AccentHover: "#FF33312D", AccentPressed: "#FF4A4741",
-        OnAccent: "#FFFAF8F3");
+        OnAccent: "#FFFAF8F3", Raised: "#FFE9E4DB");
 
     public static readonly ThemeDef Porcelain = new(
         "Porcelain", "Porcelain", true,
@@ -58,7 +59,7 @@ public static class Themes
         Stroke: "#16111112", StrokeStrong: "#29111112",
         Text: "#FF111112", TextMuted: "#FF5C5C63", TextDim: "#FF707077",
         Accent: "#FF101012", AccentHover: "#FF2C2C30", AccentPressed: "#FF434348",
-        OnAccent: "#FFFFFFFF");
+        OnAccent: "#FFFFFFFF", Raised: "#FFEDEDEA");
 
     public static readonly IReadOnlyList<ThemeDef> All = new[] { Noir, Graphite, Ivory, Porcelain };
 
@@ -97,6 +98,7 @@ public static class ThemeManager
         Set(res, "Stroke", Current.Stroke);
         Set(res, "StrokeStrong", Current.StrokeStrong);
         Set(res, "CursorRing", Current.Text);
+        Set(res, "Raised", Current.Raised);
         Set(res, "ScrollThumb", Current.Light ? "#33000000" : "#40FFFFFF");
 
         var hover = Current.Light ? "#0D000000" : "#12FFFFFF";

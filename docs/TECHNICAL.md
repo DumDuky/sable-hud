@@ -145,6 +145,15 @@ mute, grouped per-process sessions with their current device, and
 probed at runtime; if routing is unsupported the UI opens the Windows per-app mixer
 instead. Discord is ordered first.
 
+Sessions are grouped per PID and include apps that are not currently rendering audio,
+because a paused app still has a mixer row the user may want to mute or route. Each
+session carries an `Active` flag, and the active ones sort first. `AudioView` rebuilds
+its rows only when the session signature changes, but it runs the structural build
+once unconditionally: that build is what registers the three top controls with the
+controller nav layer. Before 1.1 the build was skipped when the session signature was
+empty (no app playing), which left the page with an empty nav list, no cursor and no
+way to reach anything.
+
 ## Settings
 
 `%APPDATA%\SableHUD\settings.json`, camelCase JSON, validated on load by
@@ -202,9 +211,28 @@ HUD is hidden without a virtual pad, so the real pad cannot stay hidden with no 
 
 ## Animations
 
-The overlay enters from above over 460 ms with a quintic ease, fades over 280 ms and
-scales the shell from 98.2% to 100%. It leaves over 280 ms. Page changes slide 9 px
-and fade over 320 ms. The mini player fades in over 220 ms.
+One curve, `CubicEase` ease-out, across the shell. The overlay rises 10 px over 260 ms,
+fades over 220 ms and scales the shell from 99% to 100% over 240 ms. It leaves over
+200 ms with the same curve. Page changes slide 9 px and fade over 320 ms. The mini
+player fades in over 220 ms. Nothing loops, nothing animates layout properties.
+
+## Interface
+
+Every page shares one chrome, so the rules live in `Themes/Base.xaml` and
+`Core/ThemeManager.cs`:
+
+- **Type** comes from six sizes: 11, 13, 15, 20, 28 and 30 for card figures. `Display`,
+  `Heading`, `Body`, `Dim` and `Micro` map onto those, and pages override only where a
+  number needs to be larger. Nothing renders below 11 px.
+- **Two active states.** `IsActive` is the solid accent fill used by toggles such as
+  shuffle and repeat. `QuietActive` (with the `QuietNav` style) is the raised surface
+  plus hairline used by the tab strip and the Settings sidebar, so the chrome never
+  outshines the page content.
+- **One cursor.** `HudButton` draws a single 1 px ring 4 px outside the item and a
+  subtle surface step. The item's own border is hidden while the cursor is on it, so
+  no double outline appears.
+- **Hints** are keycaps on a fixed rhythm: 10 px glyphs in a 5 px chip, 11 px labels,
+  18 px between groups.
 
 ## Single instance
 

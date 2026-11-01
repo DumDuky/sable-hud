@@ -10,7 +10,8 @@ public sealed record AudioSessionInfo(
     float Volume,
     bool Muted,
     string DeviceId,
-    string DeviceName);
+    string DeviceName,
+    bool Active);
 
 public sealed record AudioDeviceInfo(string Id, string Name, bool IsDefault);
 
@@ -83,7 +84,8 @@ public sealed class AudioService : IDisposable
                 {
                     try
                     {
-                        if (!s.IsActive) continue;
+                        // A paused app still has a mixer row: audio not flowing
+                        // right now does not mean the user cannot mute or route it.
                         var pid = s.ProcessId;
                         if (pid <= 4 || pid == Environment.ProcessId) continue;
 
@@ -107,11 +109,12 @@ public sealed class AudioService : IDisposable
                             {
                                 Volume = Math.Max(existing.Volume, volume),
                                 Muted = existing.Muted && muted,
+                                Active = existing.Active || s.IsActive,
                             };
                         }
                         else
                         {
-                            grouped[pid] = new AudioSessionInfo(pid, name, volume, muted, deviceId, deviceName);
+                            grouped[pid] = new AudioSessionInfo(pid, name, volume, muted, deviceId, deviceName, s.IsActive);
                         }
                     }
                     catch { }
@@ -135,7 +138,8 @@ public sealed class AudioService : IDisposable
                 }
 
                 sessions = grouped.Values
-                    .OrderByDescending(s => s.Name.Equals("Discord", StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(s => s.Active)
+                    .ThenByDescending(s => s.Name.Equals("Discord", StringComparison.OrdinalIgnoreCase))
                     .ThenBy(s => s.Name, StringComparer.CurrentCultureIgnoreCase)
                     .ToList();
             }

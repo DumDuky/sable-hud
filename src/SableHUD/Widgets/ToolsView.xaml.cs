@@ -45,12 +45,12 @@ public partial class ToolsView : HudPageBase
         };
 
         Root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        Root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(12) });
+        Root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(16) });
         Root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        Root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(12) });
+        Root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(16) });
         Root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         Root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-        Root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(12) });
+        Root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(16) });
         Root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
         for (var i = 0; i < defs.Length; i++)
@@ -62,8 +62,8 @@ public partial class ToolsView : HudPageBase
             var button = new HudButton
             {
                 Height = double.NaN,
-                CornerRadius = new CornerRadius(19),
-                Padding = new Thickness(16, 13, 16, 13),
+                CornerRadius = new CornerRadius(18),
+                Padding = new Thickness(20, 14, 20, 14),
                 Background = (Brush)Application.Current.Resources["CardBg"],
                 BorderBrush = (Brush)Application.Current.Resources["Stroke"],
                 BorderThickness = new Thickness(1),
@@ -80,8 +80,8 @@ public partial class ToolsView : HudPageBase
 
             var iconBox = new Border
             {
-                Width = 34,
-                Height = 34,
+                Width = 36,
+                Height = 36,
                 CornerRadius = new CornerRadius(10),
                 Background = (Brush)Application.Current.Resources["BgSoft"],
                 BorderBrush = (Brush)Application.Current.Resources["Stroke"],
@@ -92,46 +92,33 @@ public partial class ToolsView : HudPageBase
             {
                 Data = Ui.Geo(def.Icon),
                 Fill = (Brush)Application.Current.Resources["Text"],
-                Width = 16,
-                Height = 16,
+                Width = 17,
+                Height = 17,
                 Stretch = Stretch.Uniform,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Opacity = 0.9,
             };
 
             var title = new TextBlock
             {
                 Text = def.Title,
-                FontSize = 13.5,
+                FontSize = 15,
                 FontWeight = FontWeights.SemiBold,
                 Margin = new Thickness(0, 12, 0, 0),
             };
             var sub = new TextBlock
             {
                 Text = def.Sub,
-                FontSize = 10.2,
+                FontSize = 13,
                 Foreground = (Brush)Application.Current.Resources["TextDim"],
                 TextTrimming = TextTrimming.CharacterEllipsis,
             };
 
-            var arrow = new System.Windows.Shapes.Path
-            {
-                Data = Ui.Geo("IconChevronRight"),
-                Fill = (Brush)Application.Current.Resources["TextDim"],
-                Width = 12,
-                Height = 12,
-                Stretch = Stretch.Uniform,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Top,
-                Opacity = 0.6,
-            };
 
             var bottom = new StackPanel();
             bottom.Children.Add(title);
             bottom.Children.Add(sub);
             content.Children.Add(iconBox);
-            content.Children.Add(arrow);
             Grid.SetRow(bottom, 2);
             content.Children.Add(bottom);
             button.Content = content;

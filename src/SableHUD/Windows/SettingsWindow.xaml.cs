@@ -95,7 +95,8 @@ public partial class SettingsWindow : Window
                 IconSize = 15,
                 IconMargin = new Thickness(0, 0, 10, 0),
                 Content = section.Title,
-                FontSize = 12,
+                FontSize = 13,
+                Style = (Style)FindResource("QuietNav"),
                 Margin = new Thickness(0, 0, 0, 4),
             };
             var target = section;
@@ -110,7 +111,7 @@ public partial class SettingsWindow : Window
         _section = Math.Clamp(index, 0, Sections.Length - 1);
         SectionTitleTop.Text = Sections[_section].Title;
         foreach (var (id, button) in _nav)
-            button.IsActive = id == Sections[_section].Id;
+            button.QuietActive = id == Sections[_section].Id;
 
         _cursor = 0;
         SettingsScroll.ScrollToTop();
@@ -219,13 +220,13 @@ public partial class SettingsWindow : Window
         {
             Text = title,
             Style = (Style)Application.Current.Resources["Heading"],
-            FontSize = 21,
+            FontSize = 20,
         });
         ContentHost.Children.Add(new TextBlock
         {
             Text = subtitle,
             Style = (Style)Application.Current.Resources["Body"],
-            FontSize = 11.5,
+            FontSize = 13,
             Margin = new Thickness(0, 5, 0, 18),
             TextWrapping = TextWrapping.Wrap,
             MaxWidth = 560,
@@ -251,11 +252,11 @@ public partial class SettingsWindow : Window
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
         var left = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 14, 0) };
-        left.Children.Add(new TextBlock { Text = label, FontSize = 12.5, FontWeight = FontWeights.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
+        left.Children.Add(new TextBlock { Text = label, FontSize = 13, FontWeight = FontWeights.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
         left.Children.Add(new TextBlock
         {
             Text = description,
-            FontSize = 10.2,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             TextWrapping = TextWrapping.Wrap,
             MaxWidth = 460,
@@ -293,7 +294,7 @@ public partial class SettingsWindow : Window
                 right.Children.Add(new TextBlock
                 {
                     Text = value,
-                    FontSize = 10.8,
+                    FontSize = 11,
                     FontWeight = FontWeights.SemiBold,
                     Foreground = (Brush)Application.Current.Resources["TextMuted"],
                     VerticalAlignment = VerticalAlignment.Center,
@@ -687,7 +688,7 @@ public partial class SettingsWindow : Window
             {
                 Text = text,
                 Style = (Style)Application.Current.Resources["Body"],
-                FontSize = 11.2,
+                FontSize = 13,
                 LineHeight = 17,
                 TextWrapping = TextWrapping.Wrap,
                 MaxWidth = 570,
@@ -714,7 +715,7 @@ public partial class SettingsWindow : Window
         {
             Text = "Sable HUD is licensed GPL-3.0 to match the LiMusic work it integrates with. Themes in this app are a monochrome interpretation of LiMusic's swappable theme system.",
             Style = (Style)Application.Current.Resources["Dim"],
-            FontSize = 10,
+            FontSize = 11,
             TextWrapping = TextWrapping.Wrap,
             MaxWidth = 560,
             Margin = new Thickness(2, 6, 0, 0),

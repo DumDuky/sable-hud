@@ -88,9 +88,27 @@ Latest published run: exit `0`, `passed=true`.
   search left the cursor on **Browse LiMusic**. It now resets to `PlayButton`; with no
   track loaded it still falls back to **Browse LiMusic**, which is the only useful
   action there.
-- **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
+- **Audio tab cursor (1.1)**: the page registered its three top controls only inside
+  `BuildSessions`, which was skipped while the session signature stayed empty. With no
+  app rendering audio the page had an empty nav list: no cursor ring, and no direction
+  moved. Reported from use as "you just can't navigate the audio tab", with no ring at
+  all. The structural build now runs once unconditionally, so System volume, Output and
+  Mic are always registered. Sessions also include apps that are not currently playing,
+  so a paused app keeps its mixer row.
+- **Muted speaker (1.1)**: the old 21-unit glyph was squeezed into a 13 px box and the
+  slash merged with the cone. It is now a purpose-built speaker-plus-slash designed at
+  24 units and drawn at 16 px, checked next to the unmuted icon in the design render.
+- **UI polish**: micro labels moved from shouting caps to sentence case at 11 px
   medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
   keep the player's capitalisation, and stat values use tabular figures.
+- **Chrome (1.1)**: the active tab and the Settings sidebar use a raised surface plus a
+  hairline instead of a solid white fill, the cursor is one 1 px ring with the item's
+  own border hidden, the hint strip uses one keycap size on an 18 px rhythm, Tools drops
+  its six chevrons, and Performance keeps a single ring on Processor with thin value
+  bars for the rest. Verified in the rendered pages: no clipped subtitles in Tools or
+  the Audio mixer, both themes legible.
+- **Type scale (1.1)**: 20+ hard-coded sizes collapsed to 11, 13, 15, 20, 28 and 30.
+  Nothing in the interface is smaller than 11 px.
 - **Cloak guard**: the guard releases HidHide when isolation is disabled; while virtual
   isolation runs the real pad stays hidden on purpose. Verified show/hide in the
   stand-in test: the virtual pad went neutral/open and forwarded/closed.

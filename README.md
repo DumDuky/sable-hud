@@ -56,6 +56,8 @@ The build is unsigned, so SmartScreen may ask once. Choose **More info → Run a
 
 A controller-sized browser for your signed-in LiMusic library. Open playlists, search with an on-screen keyboard, and press A to play. The playlist becomes the queue, so playback continues to the next track and into radio when autoplay is on. Artwork follows the song or the playlist you started from, and radio tracks keep their own cover.
 
+The overlay always opens on the Music tab with the cursor on play/pause, so one press pauses whatever is playing. With nothing loaded, the cursor falls back to **Browse LiMusic**, the only action that can start something.
+
 <p align="center">
   <img src="docs/screenshots/limusic-library.png" alt="LiMusic playlists inside Sable HUD" width="100%">
 </p>
@@ -73,6 +75,8 @@ CPU, GPU, VRAM, RAM, network, foreground app, session time, battery, controller 
 ### Audio
 
 Master volume, microphone mute, a per-app mixer and per-app output routing through the same Windows route store as the system volume mixer. Discord is sorted first. On any volume row, left/right changes the level; A mutes; X opens the output picker.
+
+Paused apps stay in the mixer, so an app can be muted or routed before it makes a sound; apps playing right now sort first. The three controls at the top are always reachable, even when no app has an audio session, and a muted app shows a slashed speaker that stays readable at row size.
 
 <p align="center">
   <img src="docs/screenshots/hud-audio.png" alt="Sable HUD audio mixer" width="100%">

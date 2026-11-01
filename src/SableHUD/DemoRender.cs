@@ -231,9 +231,9 @@ public static class DemoRender
         },
         new[]
         {
-            new AudioSessionInfo(1001, "Discord", 0.72f, false, "dev-headset", "G435 Wireless Headset"),
-            new AudioSessionInfo(1002, "ELDEN RING", 0.55f, false, "dev-tv", "Roku TV"),
-            new AudioSessionInfo(1003, "Spotify", 0.8f, true, "dev-yeti", "Speakers (Yeti Classic)"),
+            new AudioSessionInfo(1001, "Discord", 0.72f, false, "dev-headset", "G435 Wireless Headset", true),
+            new AudioSessionInfo(1002, "ELDEN RING", 0.55f, false, "dev-tv", "Roku TV", true),
+            new AudioSessionInfo(1003, "Spotify", 0.8f, true, "dev-yeti", "Speakers (Yeti Classic)", false),
         });
 
     private static void Save(FrameworkElement element, string path, bool light)

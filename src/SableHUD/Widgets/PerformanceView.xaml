@@ -7,90 +7,99 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="116" />
-            <RowDefinition Height="12" />
+            <RowDefinition Height="16" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
 
         <!-- ============================ vitals ============================ -->
         <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.7*" />
+                <ColumnDefinition Width="16" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="16" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="12" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="16" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Style="{StaticResource Card}" Padding="14,12">
+            <Border Style="{StaticResource Card}" Padding="18,14">
                 <Grid>
-                    <StackPanel>
+                    <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="Processor" Style="{StaticResource Micro}" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <TextBlock x:Name="CpuValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
-                            <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,10,0,0" />
+                            <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,9,0,0" />
                         </StackPanel>
                         <TextBlock x:Name="CpuSub" Style="{StaticResource Dim}" Margin="0,4,0,0" Text="sampling…" />
                     </StackPanel>
-                    <controls:HudRing x:Name="CpuRing" Width="58" Height="58" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    <controls:HudRing x:Name="CpuRing" Width="64" Height="64" HorizontalAlignment="Right" VerticalAlignment="Center"
                                       Thickness="4"
                                       Track="{DynamicResource StrokeStrong}"
                                       Fill="{DynamicResource Text}" />
                 </Grid>
             </Border>
 
-            <Border Grid.Column="2" Style="{StaticResource Card}" Padding="14,12">
+            <Border Grid.Column="2" Style="{StaticResource Card}" Padding="16,14">
                 <Grid>
-                    <StackPanel>
-                        <TextBlock Text="Graphics" Style="{StaticResource Micro}" />
-                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <TextBlock x:Name="GpuValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
-                            <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,10,0,0" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Graphics" Style="{StaticResource Micro}" />
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,6,0,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="GpuValue" Style="{StaticResource StatValue}" FontSize="28" Text="—" />
+                            <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,9,0,0" />
                         </StackPanel>
-                        <TextBlock x:Name="GpuSub" Style="{StaticResource Dim}" Margin="0,4,0,0" Text="GPU engine" />
+                        <TextBlock x:Name="GpuSub" Style="{StaticResource Dim}" Margin="0,3,0,0" Text="3D engine" />
                     </StackPanel>
-                    <controls:HudRing x:Name="GpuRing" Width="58" Height="58" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                      Thickness="4"
-                                      Track="{DynamicResource StrokeStrong}"
-                                      Fill="{DynamicResource Text}" />
+                    <controls:HudProgress x:Name="GpuBar" Grid.Row="2" Height="4"
+                                          Track="{DynamicResource StrokeStrong}"
+                                          Fill="{DynamicResource TextMuted}" />
                 </Grid>
             </Border>
 
-            <Border Grid.Column="4" Style="{StaticResource Card}" Padding="14,12">
+            <Border Grid.Column="4" Style="{StaticResource Card}" Padding="16,14">
                 <Grid>
-                    <StackPanel>
-                        <TextBlock Text="Memory" Style="{StaticResource Micro}" />
-                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <TextBlock x:Name="RamValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
-                            <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,10,0,0" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Memory" Style="{StaticResource Micro}" />
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,6,0,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="RamValue" Style="{StaticResource StatValue}" FontSize="28" Text="—" />
+                            <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,9,0,0" />
                         </StackPanel>
-                        <TextBlock x:Name="RamSub" Style="{StaticResource Dim}" Margin="0,4,0,0" Text="system RAM" />
+                        <TextBlock x:Name="RamSub" Style="{StaticResource Dim}" Margin="0,3,0,0" Text="system RAM" />
                     </StackPanel>
-                    <controls:HudRing x:Name="RamRing" Width="58" Height="58" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                      Thickness="4"
-                                      Track="{DynamicResource StrokeStrong}"
-                                      Fill="{DynamicResource Text}" />
+                    <controls:HudProgress x:Name="RamBar" Grid.Row="2" Height="4"
+                                          Track="{DynamicResource StrokeStrong}"
+                                          Fill="{DynamicResource TextMuted}" />
                 </Grid>
             </Border>
 
-            <Border Grid.Column="6" Style="{StaticResource Card}" Padding="14,12">
+            <Border Grid.Column="6" Style="{StaticResource Card}" Padding="16,14">
                 <Grid>
-                    <StackPanel>
-                        <TextBlock Text="Frames" Style="{StaticResource Micro}" />
-                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <TextBlock x:Name="FpsValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
-                            <TextBlock Text="fps" Style="{StaticResource Dim}" Margin="4,10,0,0" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Frames" Style="{StaticResource Micro}" />
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,6,0,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="FpsValue" Style="{StaticResource StatValue}" FontSize="28" Text="—" />
+                            <TextBlock Text="fps" Style="{StaticResource Dim}" Margin="4,9,0,0" />
                         </StackPanel>
-                        <TextBlock x:Name="FpsSub" Style="{StaticResource Dim}" Margin="0,4,0,0" Text="RTSS" />
+                        <TextBlock x:Name="FpsSub" Style="{StaticResource Dim}" Margin="0,3,0,0" Text="RTSS" />
                     </StackPanel>
-                    <controls:HudRing x:Name="FpsRing" Width="58" Height="58" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                      Thickness="4"
-                                      Track="{DynamicResource StrokeStrong}"
-                                      Fill="{DynamicResource Text}" />
+                    <controls:HudProgress x:Name="FpsBar" Grid.Row="2" Height="4"
+                                          Track="{DynamicResource StrokeStrong}"
+                                          Fill="{DynamicResource TextMuted}" />
                 </Grid>
             </Border>
         </Grid>
@@ -99,13 +108,13 @@
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.3*" />
-                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="16" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="16" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Style="{StaticResource Card}" Padding="15,13">
+            <Border Style="{StaticResource Card}" Padding="18,16">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -113,15 +122,15 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <Border Width="24" Height="24" CornerRadius="8" Background="{DynamicResource BgSoft}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1">
-                            <Path Data="{StaticResource IconGamepad}" Fill="{DynamicResource TextMuted}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Border Width="26" Height="26" CornerRadius="8" Background="{DynamicResource BgSoft}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1">
+                            <Path Data="{StaticResource IconGamepad}" Fill="{DynamicResource TextMuted}" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
-                        <TextBlock Text="Foreground" Style="{StaticResource Micro}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Foreground" Style="{StaticResource Micro}" Margin="9,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                        <TextBlock x:Name="GameTitle" Style="{StaticResource Heading}" FontSize="18" Text="Desktop" TextTrimming="CharacterEllipsis" />
-                        <TextBlock x:Name="GameExe" Style="{StaticResource Dim}" Margin="0,3,0,0" Text="nothing in focus" />
+                        <TextBlock x:Name="GameTitle" Style="{StaticResource Heading}" FontSize="20" Text="Desktop" TextTrimming="CharacterEllipsis" />
+                        <TextBlock x:Name="GameExe" Style="{StaticResource Dim}" Margin="0,4,0,0" Text="nothing in focus" />
                     </StackPanel>
 
                     <Grid Grid.Row="2">
@@ -131,7 +140,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Column="2" Style="{StaticResource Card}" Padding="15,13">
+            <Border Grid.Column="2" Style="{StaticResource Card}" Padding="16,16">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -139,7 +148,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Text="Network" Style="{StaticResource Micro}" />
-                    <Grid Grid.Row="1" Margin="0,9,0,0">
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="{StaticResource IconChevronDown}" Fill="{DynamicResource Text}" Width="8" Height="8" Stretch="Uniform" VerticalAlignment="Center" />
                             <TextBlock x:Name="DownValue" FontSize="15" FontWeight="SemiBold" Margin="6,0,0,0" Text="0.0" />
@@ -155,14 +164,14 @@
                             <TextBlock Text="Mb/s" Style="{StaticResource Dim}" Margin="4,3,0,0" />
                         </StackPanel>
                     </Grid>
-                    <controls:HudSparkline x:Name="NetSpark" Grid.Row="2" Height="34" Margin="0,9,0,0"
+                    <controls:HudSparkline x:Name="NetSpark" Grid.Row="2" Height="34" Margin="0,10,0,2"
                                            Stroke="{DynamicResource Text}"
                                            Fill="{DynamicResource SparkFill}"
                                            StrokeThickness="1.2" />
                 </Grid>
             </Border>
 
-            <Border Grid.Column="4" Style="{StaticResource Card}" Padding="15,13">
+            <Border Grid.Column="4" Style="{StaticResource Card}" Padding="16,12">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -170,8 +179,8 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Text="Session" Style="{StaticResource Micro}" />
-                    <StackPanel Grid.Row="1" Margin="0,8,0,0">
-                        <TextBlock x:Name="BigSession" Style="{StaticResource StatValue}" FontSize="21" Text="0m" />
+                    <StackPanel Grid.Row="1" Margin="0,6,0,0">
+                        <TextBlock x:Name="BigSession" Style="{StaticResource StatValue}" FontSize="20" Text="0m" />
                         <TextBlock Text="with Sable open" Style="{StaticResource Dim}" Margin="0,2,0,0" />
                     </StackPanel>
                     <Grid Grid.Row="2" VerticalAlignment="Bottom" Margin="0,8,0,0">
@@ -181,7 +190,7 @@
                                     <Border x:Name="BatteryFill" Background="{DynamicResource Text}" CornerRadius="1.5" HorizontalAlignment="Left" Width="2" />
                                 </Grid>
                             </Border>
-                            <TextBlock x:Name="BatteryText" Style="{StaticResource Dim}" Margin="7,0,0,0" Text="No battery" />
+                            <TextBlock x:Name="BatteryText" Style="{StaticResource Dim}" Margin="8,0,0,0" Text="No battery" />
                         </StackPanel>
                         <TextBlock x:Name="GpuMemoryText" Style="{StaticResource Dim}" HorizontalAlignment="Right" Text="VRAM —" />
                     </Grid>

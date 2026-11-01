@@ -43,7 +43,7 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Width="22" Height="22" CornerRadius="7" Background="{DynamicResource Accent}">
+                        <Border Width="24" Height="24" CornerRadius="8" Background="{DynamicResource Accent}">
                             <Path Data="{StaticResource IconChevronDown}"
                                   Fill="{DynamicResource OnAccent}"
                                   Width="12" Height="12"
@@ -51,8 +51,8 @@
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center" />
                         </Border>
-                        <TextBlock Text="Sable" FontSize="12.5" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center" />
-                        <TextBlock Text="HUD" FontSize="9" FontWeight="SemiBold" Foreground="{DynamicResource TextDim}" Margin="5,1,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Sable" FontSize="15" FontWeight="SemiBold" Margin="9,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="HUD" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextDim}" Margin="6,2,0,0" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <Border Grid.Column="1"
@@ -61,23 +61,23 @@
                             Background="{DynamicResource BgSoft}"
                             BorderBrush="{DynamicResource Stroke}"
                             BorderThickness="1"
-                            CornerRadius="12"
+                            CornerRadius="13"
                             Padding="3">
                         <StackPanel x:Name="TabStrip" Orientation="Horizontal" />
                     </Border>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                         <Border Background="{DynamicResource BgSoft}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                                CornerRadius="10" Height="24" Padding="8,0" Margin="0,0,8,0">
+                                CornerRadius="9" Height="26" Padding="9,0" Margin="0,0,9,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <Ellipse x:Name="PadDot" Width="5" Height="5" Fill="{DynamicResource TextDim}" VerticalAlignment="Center" />
-                                <TextBlock x:Name="PadLabel" Text="No pad" FontSize="9.5" Foreground="{DynamicResource TextMuted}" Margin="6,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock x:Name="PadLabel" Text="No pad" FontSize="11" Foreground="{DynamicResource TextMuted}" Margin="6,0,0,0" VerticalAlignment="Center" />
                             </StackPanel>
                         </Border>
-                        <TextBlock x:Name="ClockText" Text="--:--" FontSize="11.5" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,9,0" />
+                        <TextBlock x:Name="ClockText" Text="--:--" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,9,0" />
                         <controls:HudButton x:Name="CloseButton"
                                             Width="30" Height="30" CornerRadius="10"
-                                            Icon="{StaticResource IconClose}" IconSize="13" IconMargin="0" Padding="0" />
+                                            Icon="{StaticResource IconClose}" IconSize="14" IconMargin="0" Padding="0" />
                     </StackPanel>
                 </Grid>
 
@@ -88,9 +88,9 @@
                 <Grid Grid.Row="4">
                     <StackPanel x:Name="HintStrip" Orientation="Horizontal" VerticalAlignment="Center" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <TextBlock x:Name="StatusText" Text="" FontSize="9.5" Foreground="{DynamicResource TextMuted}" Margin="0,0,12,0" Visibility="Collapsed" TextTrimming="CharacterEllipsis" MaxWidth="330" />
-                        <TextBlock x:Name="HotkeyHint" Text="Ctrl+Alt+H" FontSize="9.5" Foreground="{DynamicResource TextDim}" Margin="0,0,10,0" />
-                        <TextBlock x:Name="VersionText" Text="Sable 1.0" FontSize="9.5" Foreground="{DynamicResource TextDim}" />
+                        <TextBlock x:Name="StatusText" Text="" FontSize="11" Foreground="{DynamicResource TextMuted}" Margin="0,0,12,0" Visibility="Collapsed" TextTrimming="CharacterEllipsis" MaxWidth="330" />
+                        <TextBlock x:Name="HotkeyHint" Text="Ctrl+Alt+H" FontSize="11" Foreground="{DynamicResource TextDim}" Margin="0,0,10,0" />
+                        <TextBlock x:Name="VersionText" Text="Sable 1.0" FontSize="11" Foreground="{DynamicResource TextDim}" />
                     </StackPanel>
                 </Grid>
             </Grid>

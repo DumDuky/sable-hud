@@ -29,30 +29,30 @@ public partial class PerformanceView : HudPageBase
         if (s.GpuAvailable)
         {
             GpuValue.Text = $"{s.GpuPercent:0}";
-            GpuRing.Value = s.GpuPercent / 100.0;
+            GpuBar.Value = s.GpuPercent / 100.0;
             GpuSub.Text = "3D engine";
         }
         else
         {
             GpuValue.Text = "—";
-            GpuRing.Value = 0;
+            GpuBar.Value = 0;
             GpuSub.Text = "no GPU counters";
         }
 
         RamValue.Text = $"{s.RamPercent:0}";
-        RamRing.Value = s.RamPercent / 100.0;
+        RamBar.Value = s.RamPercent / 100.0;
         RamSub.Text = $"{s.RamUsedGb:0.0} / {s.RamTotalGb:0.0} GB";
 
         if (s.Fps is double fps)
         {
             FpsValue.Text = $"{fps:0}";
-            FpsRing.Value = Math.Clamp(fps / 240.0, 0, 1);
+            FpsBar.Value = Math.Clamp(fps / 240.0, 0, 1);
             FpsSub.Text = "RTSS live";
         }
         else
         {
             FpsValue.Text = "—";
-            FpsRing.Value = 0;
+            FpsBar.Value = 0;
             FpsSub.Text = Services.Settings.RtssFps ? "RTSS not running" : "Turned off";
         }
 

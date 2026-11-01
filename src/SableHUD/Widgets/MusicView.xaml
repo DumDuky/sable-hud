@@ -72,7 +72,7 @@
                 </StackPanel>
 
                 <TextBlock x:Name="TrackTitle" Style="{StaticResource Display}" Margin="0,11,0,0" Text="Silence" />
-                <TextBlock x:Name="TrackArtist" Style="{StaticResource Body}" FontSize="14" Margin="0,3,0,0" Text="Nothing is playing yet" />
+                <TextBlock x:Name="TrackArtist" Style="{StaticResource Body}" FontSize="15" Margin="0,3,0,0" Text="Nothing is playing yet" />
                 <TextBlock x:Name="TrackAlbum" Style="{StaticResource Dim}" Margin="0,4,0,0" Text="" />
 
                 <Grid x:Name="SeekHit" Height="17" Margin="0,16,0,0" Background="Transparent" Cursor="Hand">
@@ -131,11 +131,11 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Source" Style="{StaticResource Micro}" />
-                    <TextBlock x:Name="SideSource" Grid.Row="1" Style="{StaticResource Heading}" FontSize="17" Margin="0,5,0,0" Text="—" />
+                    <TextBlock x:Name="SideSource" Grid.Row="1" Style="{StaticResource Heading}" FontSize="20" Margin="0,5,0,0" Text="—" />
                     <Border Grid.Row="2" Style="{StaticResource Divider}" Margin="0,12,0,0" />
                     <StackPanel Grid.Row="3" Margin="0,12,0,0">
                         <TextBlock x:Name="SideLabel" Text="Next up" Style="{StaticResource Micro}" />
-                        <TextBlock x:Name="SideDetail" Style="{StaticResource Body}" FontSize="12" Margin="0,5,0,0" Text="Start a track to see more." TextWrapping="Wrap" />
+                        <TextBlock x:Name="SideDetail" Style="{StaticResource Body}" FontSize="13" Margin="0,5,0,0" Text="Start a track to see more." TextWrapping="Wrap" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="5">
@@ -143,17 +143,17 @@
                                             Height="34" CornerRadius="11" Padding="10,0"
                                             HorizontalContentAlignment="Left"
                                             Icon="{StaticResource IconLibrary}" IconSize="15" IconMargin="0,0,8,0"
-                                            Content="Browse LiMusic" FontSize="11.5" />
+                                            Content="Browse LiMusic" FontSize="13" />
                         <controls:HudButton x:Name="LibraryButton"
                                             Height="34" CornerRadius="11" Margin="0,6,0,0" Padding="10,0"
                                             HorizontalContentAlignment="Left"
                                             Icon="{StaticResource IconSearch}" IconSize="15" IconMargin="0,0,8,0"
-                                            Content="Search" FontSize="11.5" />
+                                            Content="Search" FontSize="13" />
                         <controls:HudButton x:Name="MiniButton" Visibility="Collapsed"
                                             Height="34" CornerRadius="11" Margin="0,6,0,0" Padding="10,0"
                                             HorizontalContentAlignment="Left"
                                             Icon="{StaticResource IconMonitor}" IconSize="15" IconMargin="0,0,8,0"
-                                            Content="Mini player" FontSize="11.5" />
+                                            Content="Mini player" FontSize="13" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -186,18 +186,18 @@
                                         Height="34" CornerRadius="11" Padding="12,0"
                                         HorizontalContentAlignment="Left"
                                         Icon="{StaticResource IconFolder}" IconSize="15" IconMargin="0,0,7,0"
-                                        Content="Choose folder" FontSize="11.5" />
+                                        Content="Choose folder" FontSize="13" />
                     <controls:HudButton x:Name="RescanButton"
                                         Height="34" CornerRadius="11" Margin="8,0,0,0" Padding="12,0"
                                         HorizontalContentAlignment="Left"
                                         Icon="{StaticResource IconRefresh}" IconSize="15" IconMargin="0,0,7,0"
-                                        Content="Rescan" FontSize="11.5" />
+                                        Content="Rescan" FontSize="13" />
                 </StackPanel>
                 <controls:HudButton x:Name="BackButton"
                                     Height="34" CornerRadius="11" Padding="12,0" HorizontalAlignment="Right"
                                     HorizontalContentAlignment="Left"
                                     Icon="{StaticResource IconBack}" IconSize="15" IconMargin="0,0,7,0"
-                                    Content="Back" FontSize="11.5" />
+                                    Content="Back" FontSize="13" />
             </Grid>
         </Grid>
     </Grid>

@@ -52,8 +52,8 @@
                 </Border>
 
                 <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                    <TextBlock x:Name="MiniTitle" Text="Nothing playing" FontSize="12" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
-                    <TextBlock x:Name="MiniArtist" Text="Sable HUD" FontSize="9.8" Foreground="{DynamicResource TextDim}" Margin="0,2,0,0" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="MiniTitle" Text="Nothing playing" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="MiniArtist" Text="Sable HUD" FontSize="11" Foreground="{DynamicResource TextDim}" Margin="0,2,0,0" TextTrimming="CharacterEllipsis" />
                     <controls:HudProgress x:Name="MiniProgress" Height="2.5" Margin="0,6,8,0"
                                           Track="{DynamicResource StrokeStrong}"
                                           Fill="{DynamicResource TextMuted}" />

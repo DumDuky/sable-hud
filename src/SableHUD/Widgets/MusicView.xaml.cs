@@ -272,7 +272,7 @@ public partial class MusicView : HudPageBase
         _browserTitle = new TextBlock
         {
             Text = "LiMusic",
-            FontSize = 19,
+            FontSize = 20,
             FontWeight = FontWeights.SemiBold,
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming = TextTrimming.CharacterEllipsis,
@@ -280,7 +280,7 @@ public partial class MusicView : HudPageBase
         _browserStatus = new TextBlock
         {
             Text = "",
-            FontSize = 10.5,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming = TextTrimming.CharacterEllipsis,
@@ -383,7 +383,7 @@ public partial class MusicView : HudPageBase
         var hint = new TextBlock
         {
             Text = "B back · X search · LT/RT page",
-            FontSize = 9.5,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             Margin = new Thickness(2, 0, 0, 0),
         };
@@ -403,7 +403,7 @@ public partial class MusicView : HudPageBase
             Width = width,
             CornerRadius = new CornerRadius(7),
             Padding = new Thickness(0),
-            FontSize = 10.5,
+            FontSize = 11,
             Content = text,
             Margin = new Thickness(2, 1, 2, 1),
             Background = (Brush)Application.Current.Resources["BgSoft"],
@@ -865,7 +865,7 @@ public partial class MusicView : HudPageBase
         var name = new TextBlock
         {
             Text = title,
-            FontSize = 11.8,
+            FontSize = 13,
             FontWeight = FontWeights.SemiBold,
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Center,
@@ -873,7 +873,7 @@ public partial class MusicView : HudPageBase
         var detail = new TextBlock
         {
             Text = meta,
-            FontSize = 9.8,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             VerticalAlignment = VerticalAlignment.Center,
             MaxWidth = 420,
@@ -1160,7 +1160,7 @@ public partial class MusicView : HudPageBase
         var title = new TextBlock
         {
             Text = track.Title,
-            FontSize = 11.5,
+            FontSize = 13,
             FontWeight = FontWeights.SemiBold,
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Center,
@@ -1168,7 +1168,7 @@ public partial class MusicView : HudPageBase
         var artist = new TextBlock
         {
             Text = string.IsNullOrWhiteSpace(track.Artist) ? track.Album : track.Artist,
-            FontSize = 9.6,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Center,
@@ -1178,7 +1178,7 @@ public partial class MusicView : HudPageBase
         var duration = new TextBlock
         {
             Text = Ui.Time(track.Duration),
-            FontSize = 9.8,
+            FontSize = 11,
             Foreground = (Brush)Application.Current.Resources["TextDim"],
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(12, 0, 2, 0),

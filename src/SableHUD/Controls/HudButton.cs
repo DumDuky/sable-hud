@@ -32,6 +32,9 @@ public class HudButton : Button
     public static readonly DependencyProperty SolidProperty = DependencyProperty.Register(
         nameof(Solid), typeof(bool), typeof(HudButton), new PropertyMetadata(false));
 
+    public static readonly DependencyProperty QuietActiveProperty = DependencyProperty.Register(
+        nameof(QuietActive), typeof(bool), typeof(HudButton), new PropertyMetadata(false));
+
     public Geometry? Icon
     {
         get => (Geometry?)GetValue(IconProperty);
@@ -72,6 +75,16 @@ public class HudButton : Button
     {
         get => (bool)GetValue(SolidProperty);
         set => SetValue(SolidProperty, value);
+    }
+
+    /// <summary>
+    /// Marks the tab-style active state: a raised surface and a hairline instead
+    /// of the solid accent fill, so the chrome never outshines the content.
+    /// </summary>
+    public bool QuietActive
+    {
+        get => (bool)GetValue(QuietActiveProperty);
+        set => SetValue(QuietActiveProperty, value);
     }
 
     public HudButton()
