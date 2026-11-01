@@ -84,13 +84,15 @@ Screenshot without the HUD in it, microphone mute, the Windows sound mixer, the 
 
 ### Optional pad isolation
 
-Windows sends controller input to every app. If a game reacts while the HUD is open, install the bundled **HidHide** driver from **Settings → General** and turn on **Isolate pad while HUD is open**. Sable hides both the HID gamepad and its XUSB interface only while the HUD is visible. Nothing installs or cloaks unless you choose it, and a reboot always releases the controller.
+Windows sends controller input to every app. Sable's isolation uses two drivers: **HidHide** hides the real pad from games, and **ViGEmBus** provides a virtual Xbox pad that Sable feeds. While the HUD is closed, the real pad is forwarded to the virtual one; the moment the HUD opens, the virtual pad goes neutral. A running game stops receiving input immediately, without a restart or a reload.
 
-HidHide filters new device opens, so it isolates apps that open the controller **after** the HUD is up. An app or browser page that already held the pad keeps it until it restarts or reloads; reloading the page is enough. Sable re-reads the controller devices every time the HUD opens, and a guard releases the cloak within three seconds if the HUD is hidden.
+- Install **HidHide** from Settings → General → Controller isolation driver.
+- Install **ViGEmBus** once from <https://github.com/nefarius/ViGEmBus/releases> if it is not already present.
+- Turn on **Isolate pad while HUD is open**, then restart Sable so the virtual pad starts.
 
-If the pad is ever stuck hidden, the tray menu has **Release controller** and Settings → General has the same action. Exiting Sable releases the cloak even when the HUD was open.
+A game that was already running before the virtual pad appeared has the real pad handle and must be restarted once; games launched after Sable starts see the virtual pad and work with the HUD immediately. The browser gamepad tester must be reloaded once for the same reason.
 
-A device-restart reset is not offered: on this Windows build `pnputil` cannot restart the USB composite or XUSB interfaces, and the attempt flashed a console and disrupted detection. The HID/XUSB hiding and the guard are what ship.
+Exiting Sable disconnects the virtual pad and releases the real one. A watchdog process also releases HidHide if Sable stops unexpectedly, and the tray/Settings have **Release controller**.
 
 ## Controls
 

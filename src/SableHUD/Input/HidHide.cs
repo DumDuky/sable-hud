@@ -107,7 +107,27 @@ public static class HidHide
                 return (false, "Run the packaged SableHUD.exe so the driver can allowlist it");
 
             var devices = await BuildDeviceListAsync().ConfigureAwait(false);
+
+            // Replace the persisted hide list instead of growing it. A stale
+            // path from a previous controller or a virtual pad must not stay
+            // hidden.
+            var clears = new List<string>();
+            var current = await RunAsync("--dev-list").ConfigureAwait(false);
+            if (current.Ok)
+            {
+                foreach (var line in current.Output.Split('\n'))
+                {
+                    var match = Regex.Match(line, "--dev-hide\\s+\"(.+)\"");
+                    if (match.Success) clears.Add(match.Groups[1].Value);
+                }
+            }
+
             var args = new List<string> { "--app-reg", exe, "--inv-off", "--cloak-off" };
+            foreach (var device in clears)
+            {
+                args.Add("--dev-unhide");
+                args.Add(device);
+            }
             foreach (var device in devices)
             {
                 args.Add("--dev-hide");

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 using SableHUD.Core;
@@ -22,6 +23,8 @@ public partial class App : Application
 
     private readonly System.Threading.SemaphoreSlim _isolationGate = new(1, 1);
     private bool _isolationHintShown;
+    private bool _virtualStarted;
+    private bool _watchdogStarted;
     private DispatcherTimer? _cloakGuard;
     private bool _cloakGuardBusy;
     private OverlayWindow? _overlay;
@@ -163,6 +166,17 @@ public partial class App : Application
         _cloakGuard.Tick += async (_, _) =>
         {
             if (_cloakGuardBusy || _overlay?.IsShown == true) return;
+
+            if (Services.VirtualIsolation)
+            {
+                if (Services.Settings.IsolateController) return; // hidden by design
+                Services.VirtualPad.Dispose();
+                Services.VirtualIsolation = false;
+                Services.Pad.PinnedSlot = -1;
+                await HidHide.SetCloakAsync(false).ConfigureAwait(true);
+                return;
+            }
+
             if (!Services.Settings.IsolateController || !HidHide.IsInstalled) return;
             _cloakGuardBusy = true;
             try
@@ -186,6 +200,9 @@ public partial class App : Application
         WireMedia();
         WireTray();
         WireHotkeys();
+
+        if (Services.Settings.IsolateController && HidHide.IsInstalled)
+            _ = StartVirtualIsolationAsync();
 
         if (!string.IsNullOrWhiteSpace(Services.Settings.MusicFolder))
             _ = Services.Media.Local.ScanAsync(Services.Settings.MusicFolder);
@@ -263,7 +280,12 @@ public partial class App : Application
         Services.Router.Menu += () => OnUi(RouteMenu);
         Services.Router.PagePrev += () => OnUi(() => RoutePage(-1));
         Services.Router.PageNext += () => OnUi(() => RoutePage(1));
-        Services.Router.PadChanged += info => OnUi(() => _overlay?.SetPad(info));
+        Services.Router.PadChanged += info =>
+        {
+            OnUi(() => _overlay?.SetPad(info));
+            if (info.Connected && Services.Settings.IsolateController && !Services.VirtualIsolation)
+                OnUi(() => _ = StartVirtualIsolationAsync());
+        };
     }
 
     private void WireMedia()
@@ -413,12 +435,99 @@ public partial class App : Application
     {
         _mini?.HideMini();
         _toast?.HideToast();
-        if (Services.Settings.IsolateController && HidHide.IsInstalled)
-            _ = PrepareIsolationAsync();
+
+        if (Services.VirtualIsolation)
+        {
+            // The real pad is already hidden from games; make the virtual pad
+            // neutral so a running game stops receiving input immediately.
+            Services.VirtualPad.SetForwarding(false);
+        }
+    }
+
+    private async Task StartVirtualIsolationAsync()
+    {
+        if (_virtualStarted || Services.VirtualIsolation ||
+            !Services.Settings.IsolateController || !HidHide.IsInstalled)
+            return;
+
+        _virtualStarted = true;
+        try
+        {
+            // Wait for the real pad so its slot can be pinned before the
+            // virtual pad is created. Sable must never read its own virtual pad.
+            for (var i = 0; i < 60 && !Services.Pad.Pad.Connected; i++)
+                await Task.Delay(50).ConfigureAwait(true);
+            if (!Services.Pad.Pad.Connected)
+            {
+                _virtualStarted = false;
+                return;
+            }
+
+            Services.Pad.PinnedSlot = Services.Pad.Pad.Slot;
+
+            // Hide the real pad before creating the virtual one. If the virtual
+            // pad existed first, PrepareAsync would enumerate and hide it too,
+            // leaving games with no controller at all.
+            var (ok, message) = await HidHide.PrepareAsync().ConfigureAwait(true);
+            if (!ok)
+            {
+                Log.Warn("virtual isolation: " + message);
+                Services.Pad.PinnedSlot = -1;
+                _virtualStarted = false;
+                return;
+            }
+
+            if (!Services.VirtualPad.Start())
+            {
+                await HidHide.SetCloakAsync(false).ConfigureAwait(true);
+                Services.Pad.PinnedSlot = -1;
+                _virtualStarted = false;
+                return;
+            }
+
+            Services.Pad.Tick += state => Services.VirtualPad.Submit(state);
+            Services.VirtualPad.SetForwarding(true);
+
+            await HidHide.SetCloakAsync(true).ConfigureAwait(true);
+            Services.VirtualIsolation = true;
+            StartCloakWatchdog();
+            Log.Info("virtual isolation active");
+            Hud.Toast("Virtual pad active · restart games once so they use it");
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("virtual isolation: " + ex.Message);
+            Services.VirtualPad.Dispose();
+            Services.VirtualIsolation = false;
+            _virtualStarted = false;
+        }
+    }
+
+    private void StartCloakWatchdog()
+    {
+        if (_watchdogStarted) return;
+        _watchdogStarted = true;
+        try
+        {
+            var cli = HidHide.CliPath;
+            var command =
+                $"-NoProfile -WindowStyle Hidden -Command \"Wait-Process -Id {Environment.ProcessId} -ErrorAction SilentlyContinue; Start-Sleep -Milliseconds 800; if (-not (Get-Process -Name SableHUD -ErrorAction SilentlyContinue)) {{ & '{cli}' --cloak-off }}\"";
+            Process.Start(new ProcessStartInfo("powershell.exe", command)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+            });
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("cloak watchdog: " + ex.Message);
+        }
     }
 
     private async Task PrepareIsolationAsync()
     {
+        if (Services.VirtualIsolation) return;
         await _isolationGate.WaitAsync().ConfigureAwait(true);
         try
         {
@@ -452,8 +561,14 @@ public partial class App : Application
 
     private void OnOverlayHidden()
     {
-        if (Services.Settings.IsolateController && HidHide.IsInstalled)
+        if (Services.VirtualIsolation)
+        {
+            Services.VirtualPad.SetForwarding(true);
+        }
+        else if (Services.Settings.IsolateController && HidHide.IsInstalled)
+        {
             _ = HidHide.SetCloakAsync(false);
+        }
 
         if (Services.Settings.ShowMiniPlayer && _settings?.IsOpen != true)
             _mini?.ShowMini();
@@ -581,6 +696,10 @@ public partial class App : Application
         _cloakGuard?.Stop();
         try { _toast?.Close(); } catch { }
 
+        try { Services.VirtualPad?.Dispose(); } catch { }
+        Services.VirtualIsolation = false;
+        try { if (Services.Pad is not null) Services.Pad.PinnedSlot = -1; } catch { }
+
         if (Services.Settings.IsolateController && HidHide.IsInstalled)
         {
             try { HidHide.ReleaseCloakBlocking(5000); } catch { }
@@ -609,6 +728,8 @@ public partial class App : Application
     private void OnUnhandled(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         Log.Error("dispatcher: " + e.Exception);
+        try { Services.VirtualPad?.Dispose(); } catch { }
+        Services.VirtualIsolation = false;
         try { HidHide.ReleaseCloakBlocking(1500); } catch { }
         e.Handled = true;
     }

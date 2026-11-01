@@ -459,7 +459,7 @@ public partial class SettingsWindow : Window
             });
 
         AddRow("Isolate pad while HUD is open",
-            "Hides the controller from games while the overlay is up. Apps opened after the HUD is up are isolated; an app that already opened the controller keeps it until it restarts or reloads. Sable is allowlisted.",
+            "Hides the real pad and presents a virtual Xbox pad to games. While the HUD is open the virtual pad goes neutral, so a running game stops receiving input without a restart. Requires the HidHide and ViGEmBus drivers; restart Sable after enabling.",
             Services.Settings.IsolateController ? "On" : "Off",
             () => _ = ToggleIsolationAsync(),
             toggle: Services.Settings.IsolateController);
@@ -495,21 +495,17 @@ public partial class SettingsWindow : Window
                 return;
             }
 
-            var (ok, message) = await HidHide.PrepareAsync();
-            if (!ok)
-            {
-                Hud.Toast(message);
-                return;
-            }
-
             Services.Settings.IsolateController = true;
             Services.Save();
-            Hud.Toast(message + " · Reload apps that were already open");
+            Hud.Toast("Restart Sable to start the virtual pad");
         }
         else
         {
             Services.Settings.IsolateController = false;
             Services.Save();
+            Services.VirtualPad.Dispose();
+            Services.VirtualIsolation = false;
+            Services.Pad.PinnedSlot = -1;
             await HidHide.SetCloakAsync(false);
             Hud.Toast("Controller isolation off");
         }

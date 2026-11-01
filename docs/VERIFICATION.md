@@ -69,30 +69,28 @@ Latest published run: exit `0`, `passed=true`.
   results, returns to the keyboard with the query intact; a second back returns to
   now-playing. Searching from the library returns to the library. The results ↔
   keyboard loop is gone.
-- **Pad isolation**: with the pad connected, opening the HUD hid both its HID gamepad
-  interface and its XUSB interface. A fresh, non-allowlisted XInput reader reported
-  1167 (no pad) while Sable still showed `Pad 1`; hiding the HUD uncloaked it and the
-  reader saw the pad again. Devices are re-read every time the HUD opens, so a pad
-  connected after the setting was enabled is picked up.
-  Already-open apps keep the handle they hold: an open hardwaretester page kept the
-  pad, while reloading that page with the HUD open dropped it to “Connect gamepad”.
-  This is HidHide filtering new device opens, not Sable. An **automatic pad reset**
-  was tried and removed: on this Windows build `pnputil` restarts the HID gamepad but
-  returns “not supported on this OS product” for the USB composite parent and XUSB,
-  so the tester kept its handle, and the scheduled `cmd` flashed a console on every
-  open. The task was deleted. A supported reset needs SetupAPI/devcon and is not in
-  this build.
+- **Virtual pad isolation**: Sable hides the real pad with HidHide and presents a
+  ViGEmBus Xbox 360 pad to games. With a ViGEm pad standing in for the real controller
+  (`VID_3537&PID_1098`), HidHide hid that pad, the Sable virtual pad appeared as the
+  next XInput slot, and it forwarded the real left-stick value (`20000`) while the HUD
+  was closed. With the HUD open the virtual pad reported `0` while the stand-in stayed
+  hidden. So a game using the virtual pad stops receiving input immediately, without a
+  device restart or reload. The physical pad was offline during this session, so the
+  stand-in test is the verified path; the same slot pinning and forwarding code runs
+  for the real pad.
+- **One-time switch**: a game already running before the virtual pad appeared holds the
+  real pad handle and must be restarted once. Games launched after Sable see only the
+  virtual pad. The same applies to an open browser tester once.
 - **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
   medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
   keep the player's capitalisation, and stat values use tabular figures.
-- **Cloak guard**: a previous automatic reset could finish after the HUD had closed
-  and re-cloak the pad. The reset is removed and a 3 s guard now uncloaks whenever the
-  HUD is hidden. Verified: show, hide 300 ms later, then cloak off and a fresh XInput
-  reader sees the pad.
-- **Exit release**: exiting Sable while the HUD is open now runs a blocking
-  `--cloak-off` (5 s budget) instead of a fire-and-forget 800 ms wait. Verified: show
-  (`cloak=--cloak-on`), exit, process gone, `cloak=--cloak-off`, fresh XInput sees the
-  pad. The tray and Settings also offer **Release controller** for a stuck state.
+- **Cloak guard**: the guard releases HidHide when isolation is disabled; while virtual
+  isolation runs the real pad stays hidden on purpose. Verified show/hide in the
+  stand-in test: the virtual pad went neutral/open and forwarded/closed.
+- **Exit release**: exiting Sable while the HUD is open runs a blocking `--cloak-off`
+  (5 s budget), disconnects the virtual pad and leaves a watchdog that releases HidHide
+  if Sable disappears unexpectedly. Verified: show (`cloak=--cloak-on`), exit, process
+  gone, `cloak=--cloak-off`. The tray and Settings also offer **Release controller**.
 - **Output**: the Output button is part of the D-pad focus order (master → Output →
   mic → app rows), so routing no longer needs the mouse or X on a row.
 - **Mini player**: Top-right dock preset placed it correctly; Y/hotkey toggles it.

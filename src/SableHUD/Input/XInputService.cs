@@ -36,7 +36,7 @@ public enum BatteryLevel
 
 public readonly record struct PadInfo(bool Connected, int Slot, BatteryLevel Battery, bool Wireless);
 
-public readonly record struct PadState(ushort Buttons, short LeftX, short LeftY, byte LeftTrigger, byte RightTrigger);
+public readonly record struct PadState(ushort Buttons, short LeftX, short LeftY, short RightX, short RightY, byte LeftTrigger, byte RightTrigger);
 
 /// <summary>
 /// Polls XInput. The Guide/Xbox button is only visible through the undocumented
@@ -144,6 +144,7 @@ public sealed class XInputService : IDisposable
     public event Action<PadInfo>? PadChanged;
 
     public PadInfo Pad => _info;
+    public int PinnedSlot { get; set; } = -1;
 
     public XInputService()
     {
@@ -178,8 +179,13 @@ public sealed class XInputService : IDisposable
             var found = -1;
             XInputState state = default;
 
-            // Prefer the slot that was connected last time, then scan.
-            if (_slot >= 0 && GetState(_slot, out state) == 0)
+            // With a virtual pad enabled the real pad is pinned so Sable never
+            // reads its own virtual controller by mistake.
+            if (PinnedSlot >= 0 && GetState(PinnedSlot, out state) == 0)
+            {
+                found = PinnedSlot;
+            }
+            else if (PinnedSlot < 0 && _slot >= 0 && GetState(_slot, out state) == 0)
             {
                 found = _slot;
             }
@@ -211,7 +217,7 @@ public sealed class XInputService : IDisposable
 
                 if (pressed != 0 || released != 0)
                     ButtonsChanged?.Invoke(pressed, released);
-                Tick?.Invoke(new PadState(buttons, state.Gamepad.sThumbLX, state.Gamepad.sThumbLY, state.Gamepad.bLeftTrigger, state.Gamepad.bRightTrigger));
+                Tick?.Invoke(new PadState(buttons, state.Gamepad.sThumbLX, state.Gamepad.sThumbLY, state.Gamepad.sThumbRX, state.Gamepad.sThumbRY, state.Gamepad.bLeftTrigger, state.Gamepad.bRightTrigger));
 
                 if (_clock.ElapsedMilliseconds - _lastBatteryCheck > 10_000)
                     RefreshBattery(force: false);

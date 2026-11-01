@@ -187,9 +187,9 @@ public static class SelfTest
             router.InjectForTest((ushort)PadButton.DPadRight, 0);
             router.InjectForTest((ushort)PadButton.DPadUp, 0);
             router.InjectForTest((ushort)PadButton.DPadDown, 0);
-            router.InjectTickForTest(new PadState(0, -30000, 0, 0, 0));
-            router.InjectTickForTest(new PadState(0, 30000, 0, 0, 0));
-            router.InjectTickForTest(new PadState(0, 0, 0, 200, 200));
+            router.InjectTickForTest(new PadState(0, -30000, 0, 0, 0, 0, 0));
+            router.InjectTickForTest(new PadState(0, 30000, 0, 0, 0, 0, 0));
+            router.InjectTickForTest(new PadState(0, 0, 0, 0, 0, 200, 200));
             router.Dispose();
             padStub.Dispose();
 

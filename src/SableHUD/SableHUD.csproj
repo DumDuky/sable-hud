@@ -13,7 +13,7 @@
     <RootNamespace>SableHUD</RootNamespace>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <Product>Sable HUD</Product>
     <AssemblyTitle>Sable HUD</AssemblyTitle>
     <Company>Sable</Company>
@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="Nefarius.ViGEm.Client" Version="1.21.256" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
     <PackageReference Include="WinAudioRoute" Version="0.1.0" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />

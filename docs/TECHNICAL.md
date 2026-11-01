@@ -174,27 +174,31 @@ the installer and, after a reboot, prepare the configuration:
    and hides that instance too, otherwise XInput games still see the pad
 4. `--inv-off` and `--cloak-off`
 
-The device list is rebuilt every time the HUD opens, so a pad connected after the
-setting was enabled is picked up. When the HUD is shown, `--cloak-on` hides those
-devices from every process except Sable; when it hides, `--cloak-off` restores them.
-Startup and normal exit always uncloak. A crash can leave cloaking on until Sable is
-run again or `HidHideCLI --cloak-off` is called.
+The device list is rebuilt and replaced every time the virtual isolation starts, so a
+pad connected after the setting was enabled is picked up and stale paths do not
+linger. HidHide hides those devices from every process except Sable, for as long as
+Sable runs; the real pad is then forwarded through a **ViGEmBus virtual Xbox pad**.
 
-HidHide filters **new device opens**, not handles that already exist. An app or
-browser page that opened the controller before the HUD keeps receiving input until
-it restarts or reloads; apps that open the pad after the HUD is up are isolated.
-This is why a game should be launched with the HUD already open, and why reloading a
-browser gamepad tester is enough to see the pad disappear.
+`VirtualPadService` creates an `Xbox360Controller` through `Nefarius.ViGEm.Client`,
+keeps the real pad's XInput slot pinned so Sable never reads its own virtual pad, and
+forwards buttons, axes and triggers while the HUD is closed. When the HUD opens the
+virtual pad submits a neutral report; a game using that pad stops receiving input
+immediately. The real pad is hidden from games but Sable is allowlisted, so the HUD
+keeps navigating.
+
+A game that was already running before the virtual pad appeared holds the real pad's
+handle and must be restarted once; games launched after Sable see only the virtual
+pad. Exiting Sable disconnects the virtual pad and releases the real one through a
+blocking `--cloak-off`; a hidden PowerShell watchdog releases the cloak if Sable exits
+unexpectedly.
 
 An automatic device-restart reset was tried and removed. On this Windows build
-`pnputil /restart-device` restarts the HID gamepad but returns “not supported on this
-OS product” for the USB composite parent and the XUSB interface, so XInput handles
-were never cut. The task also flashed a console window on every HUD open. A supported
-reset needs a SetupAPI/devcon implementation, which is not in this build.
+`pnputil` and SetupAPI both restart the HID gamepad but fail for the USB composite
+parent and the XUSB interface, and the scheduled task flashed a console. The virtual
+pad solves the existing-handle problem without restarting the device.
 
-A three-second guard in the app checks the cloak state whenever the HUD is hidden and
-releases it, so a reset or missed hide event can no longer leave the pad hidden with
-no HUD open.
+A three-second guard in the app releases the cloak if isolation is disabled or the
+HUD is hidden without a virtual pad, so the real pad cannot stay hidden with no HUD.
 
 ## Animations
 

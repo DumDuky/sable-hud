@@ -104,6 +104,8 @@ public static class Services
     public static SystemInfo.AudioService Audio { get; set; } = new();
     public static Media.CoverService Cover { get; set; } = new();
     public static Input.XInputService Pad { get; set; } = null!;
+    public static Input.VirtualPadService VirtualPad { get; set; } = new();
+    public static bool VirtualIsolation { get; set; }
     public static Input.ControllerRouter Router { get; set; } = null!;
     public static Core.HotkeyService Hotkeys { get; set; } = new();
     public static bool Demo { get; set; }
