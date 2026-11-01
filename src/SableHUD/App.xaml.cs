@@ -20,6 +20,7 @@ public partial class App : Application
     private Thread? _listener;
     private volatile bool _listening;
 
+    private readonly System.Threading.SemaphoreSlim _isolationGate = new(1, 1);
     private OverlayWindow? _overlay;
     private MiniPlayerWindow? _mini;
     private ToastWindow? _toast;
@@ -170,7 +171,7 @@ public partial class App : Application
 
         Autostart.Set(Services.Settings.StartWithWindows);
         if (Services.Settings.IsolateController && HidHide.IsInstalled)
-            _ = HidHide.SetCloakAsync(false);
+            _ = PrepareIsolationAsync();
 
         Hud.ShowRequested = tab => OnUi(() => ShowHud(tab));
         Hud.HideRequested = () => OnUi(HideHud);
@@ -387,7 +388,32 @@ public partial class App : Application
         _mini?.HideMini();
         _toast?.HideToast();
         if (Services.Settings.IsolateController && HidHide.IsInstalled)
-            _ = HidHide.SetCloakAsync(true);
+            _ = PrepareIsolationAsync();
+    }
+
+    private async Task PrepareIsolationAsync()
+    {
+        await _isolationGate.WaitAsync().ConfigureAwait(true);
+        try
+        {
+            var (ok, message) = await HidHide.PrepareAsync().ConfigureAwait(true);
+            if (!ok)
+            {
+                Log.Warn("isolation prepare: " + message);
+                return;
+            }
+
+            if (_overlay?.IsShown == true)
+                await HidHide.SetCloakAsync(true).ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("isolation prepare: " + ex.Message);
+        }
+        finally
+        {
+            _isolationGate.Release();
+        }
     }
 
     private void OnOverlayHidden()

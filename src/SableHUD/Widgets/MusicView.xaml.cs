@@ -43,6 +43,7 @@ public partial class MusicView : HudPageBase
     private readonly List<List<HudButton>> _keyRows = new();
     private BrowserMode _browserMode = BrowserMode.Closed;
     private BrowserMode _keyboardReturn = BrowserMode.Closed;
+    private BrowserMode _resultsReturn = BrowserMode.Closed;
     private int _browserIndex;
     private int _browserCount;
     private int _keyRow;
@@ -445,12 +446,27 @@ public partial class MusicView : HudPageBase
         {
             ShowBrowser();
             _keyboardReturn = BrowserMode.Closed;
+            _resultsReturn = BrowserMode.Closed;
             _browserMode = BrowserMode.Keyboard;
             BuildBrowserKeyboard();
             return;
         }
 
-        _keyboardReturn = _browserMode == BrowserMode.Keyboard ? BrowserMode.Closed : _browserMode;
+        if (_browserMode == BrowserMode.Keyboard) return;
+
+        if (_browserMode == BrowserMode.Results)
+        {
+            // Editing a search: leaving the keyboard exits the search flow
+            // instead of bouncing back into the results.
+            _keyboardReturn = _resultsReturn;
+        }
+        else
+        {
+            // A new search started from the library/playlist or now-playing.
+            _resultsReturn = _browserMode == BrowserMode.Playlist ? BrowserMode.Library : _browserMode;
+            _keyboardReturn = _resultsReturn;
+        }
+
         _browserMode = BrowserMode.Keyboard;
         BuildBrowserKeyboard();
     }
@@ -471,6 +487,8 @@ public partial class MusicView : HudPageBase
         if (_browserRoot is null) return;
         _browserRoot.Visibility = Visibility.Collapsed;
         _browserMode = BrowserMode.Closed;
+        _keyboardReturn = BrowserMode.Closed;
+        _resultsReturn = BrowserMode.Closed;
         _browserRows?.Children.Clear();
         _browserButtons.Clear();
         NowPanel.Visibility = Visibility.Visible;
@@ -531,9 +549,16 @@ public partial class MusicView : HudPageBase
             case BrowserMode.Keyboard:
                 _keyboardPanel!.Visibility = Visibility.Collapsed;
                 _browserRows!.Visibility = Visibility.Visible;
-                if (_keyboardReturn is BrowserMode.Results or BrowserMode.Playlist or BrowserMode.Library)
+                if (_keyboardReturn is BrowserMode.Playlist or BrowserMode.Library)
                 {
                     _browserMode = _keyboardReturn;
+                    if (_browserMode == BrowserMode.Playlist && _songs.Count == 0)
+                        _browserMode = BrowserMode.Library;
+                    if (_browserMode == BrowserMode.Library && _browseItems.Count == 0)
+                    {
+                        _ = LoadLibraryAsync();
+                        break;
+                    }
                     RenderCurrentRows();
                 }
                 else
@@ -542,6 +567,9 @@ public partial class MusicView : HudPageBase
                 }
                 break;
             case BrowserMode.Results:
+                // Back edits the search, as the hint promises. Leaving the
+                // keyboard then exits to the library/now-playing, so the two
+                // screens no longer bounce into each other forever.
                 OpenSearchKeyboard();
                 break;
             case BrowserMode.Playlist:

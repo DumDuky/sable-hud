@@ -62,6 +62,18 @@ Latest published run: exit `0`, `passed=true`.
 - **Volume**: left/right on the master/session row adjusts that volume without moving
   focus; LT/RT still repeats. Per-app levels are read live, so a change appears on the
   row immediately (verified LiMusic 90% → 65% and back).
+- **Audio page access**: opened the Audio tab with LiMusic plus three ffplay sessions
+  active; the page built in 47 ms, showed all four, and the hint now reads
+  `LB/RB Tabs` so the controller route is explicit.
+- **Back out of search**: searching from the now-playing page, then backing out of the
+  results, returns to the keyboard with the query intact; a second back returns to
+  now-playing. Searching from the library returns to the library. The results ↔
+  keyboard loop is gone.
+- **Pad isolation**: with the pad connected, opening the HUD hid both its HID gamepad
+  interface and its XUSB interface. A fresh, non-allowlisted XInput reader reported
+  1167 (no pad) while Sable still showed `Pad 1`; hiding the HUD uncloaked it and the
+  reader saw the pad again. Devices are re-read every time the HUD opens, so a pad
+  connected after the setting was enabled is picked up.
 - **Output**: the Output button is part of the D-pad focus order (master → Output →
   mic → app rows), so routing no longer needs the mouse or X on a row.
 - **Mini player**: Top-right dock preset placed it correctly; Y/hotkey toggles it.

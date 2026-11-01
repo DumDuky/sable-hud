@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using Microsoft.Win32;
 using SableHUD.Core;
 
 namespace SableHUD.Input;
@@ -86,20 +88,10 @@ public static class HidHide
                     using var doc = JsonDocument.Parse(inventory.Output);
                     if (doc.RootElement.ValueKind == JsonValueKind.Array)
                     {
-                        foreach (var item in doc.RootElement.EnumerateArray())
-                        {
-                            if (item.TryGetProperty("gamingDevice", out var gaming) && gaming.ValueKind == JsonValueKind.False)
-                                continue;
-
-                            foreach (var name in new[] { "deviceInstancePath", "xusbDeviceInstancePath" })
-                            {
-                                if (!item.TryGetProperty(name, out var value)) continue;
-                                var path = value.GetString();
-                                if (!string.IsNullOrWhiteSpace(path) && !devices.Contains(path))
-                                    devices.Add(path);
-                            }
-                        }
+                        foreach (var group in doc.RootElement.EnumerateArray())
+                            CollectGamingDevices(group, devices);
                     }
+                    AddXusbDevices(devices);
                 }
                 catch (Exception ex)
                 {
@@ -123,6 +115,74 @@ public static class HidHide
         {
             Log.Warn("HidHide prepare: " + ex.Message);
             return (false, ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// XInput pads that enumerate as HID gamepads also expose an XUSB
+    /// (XnaComposite/XboxComposite) interface that the HidHide JSON does not
+    /// list. Without it, cloaking hides the pad from DirectInput but XInput
+    /// still sees it, so isolation looks like it does nothing.
+    /// </summary>
+    private static void AddXusbDevices(List<string> devices)
+    {
+        var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var path in devices)
+        {
+            var match = Regex.Match(path, @"VID_([0-9A-Fa-f]{4})&PID_([0-9A-Fa-f]{4})");
+            if (match.Success)
+                ids.Add($"VID_{match.Groups[1].Value}&PID_{match.Groups[2].Value}");
+        }
+        if (ids.Count == 0) return;
+
+        try
+        {
+            using var usb = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Enum\USB");
+            if (usb is null) return;
+            foreach (var iface in usb.GetSubKeyNames())
+            {
+                if (!ids.Any(id => iface.StartsWith(id, StringComparison.OrdinalIgnoreCase))) continue;
+                using var ifaceKey = usb.OpenSubKey(iface);
+                if (ifaceKey is null) continue;
+
+                foreach (var instance in ifaceKey.GetSubKeyNames())
+                {
+                    using var instKey = ifaceKey.OpenSubKey(instance);
+                    var service = instKey?.GetValue("Service") as string;
+                    if (service is null || !service.StartsWith("xusb", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    var path = $@"USB\{iface}\{instance}";
+                    if (!devices.Contains(path)) devices.Add(path);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("HidHide xusb inventory: " + ex.Message);
+        }
+    }
+
+    private static void CollectGamingDevices(JsonElement item, List<string> devices)
+    {
+        if (item.ValueKind != JsonValueKind.Object) return;
+        if (item.TryGetProperty("gamingDevice", out var gaming) && gaming.ValueKind == JsonValueKind.False)
+            return;
+        if (item.TryGetProperty("present", out var present) && present.ValueKind == JsonValueKind.False)
+            return;
+
+        foreach (var name in new[] { "deviceInstancePath", "xusbDeviceInstancePath" })
+        {
+            if (!item.TryGetProperty(name, out var value)) continue;
+            var path = value.GetString();
+            if (!string.IsNullOrWhiteSpace(path) && !devices.Contains(path))
+                devices.Add(path);
+        }
+
+        if (item.TryGetProperty("devices", out var children) && children.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var child in children.EnumerateArray())
+                CollectGamingDevices(child, devices);
         }
     }
 

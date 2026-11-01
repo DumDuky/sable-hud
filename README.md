@@ -97,7 +97,7 @@ Windows sends controller input to every app. If a game reacts while the HUD is o
 | X | Music: search · Audio: output picker · Settings: dismiss |
 | D-pad ← → on a volume row | Lower or raise that volume |
 | Y | Toggle the mini player |
-| LB / RB | Previous or next widget; previous or next Settings section |
+| LB / RB | Previous or next tab; previous or next Settings section |
 | LT / RT | Music: seek −/+ 10 s · Audio: volume down/up (hold repeats) |
 | Menu / Start | Open Settings |
 

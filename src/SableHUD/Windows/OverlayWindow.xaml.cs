@@ -124,7 +124,7 @@ public partial class OverlayWindow : Window
         if (tabId == "Music") AddHint("LT/RT", "Seek");
         if (tabId == "Audio") AddHint("X", "Output");
         if (tabId == "Audio") AddHint("◀ ▶", "Volume");
-        AddHint("LB/RB", "Widgets");
+        AddHint("LB/RB", "Tabs");
         AddHint("B", "Close");
         AddHint("Y", "Mini");
         AddHint("Menu", "Settings");

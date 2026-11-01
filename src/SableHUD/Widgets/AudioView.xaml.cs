@@ -78,14 +78,22 @@ public partial class AudioView : HudPageBase
 
     public override void Activate()
     {
-        ForceRefresh();
+        try { ForceRefresh(); }
+        catch (Exception ex) { Log.Warn("audio activate: " + ex.Message); }
         base.Activate();
     }
 
     public override void Refresh()
     {
-        if (_clock.ElapsedMilliseconds - _lastRefresh > 1400) ForceRefresh();
-        else UpdateUi(CurrentSnapshot());
+        try
+        {
+            if (_clock.ElapsedMilliseconds - _lastRefresh > 1400) ForceRefresh();
+            else UpdateUi(CurrentSnapshot());
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("audio refresh: " + ex.Message);
+        }
     }
 
     private void ForceRefresh()
