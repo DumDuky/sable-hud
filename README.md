@@ -88,6 +88,8 @@ Windows sends controller input to every app. If a game reacts while the HUD is o
 
 HidHide filters new device opens, so on its own it isolates apps that open the controller **after** the HUD is up. For a game or browser page that was already running, set up **Automatic pad reset** once in **Settings → General** (one Windows admin prompt). Sable then restarts the controller as the HUD opens, which closes the old handle; the dead app cannot reopen it while Sable is cloaked, so it stops receiving input. Sable and `pnputil` are allowlisted, so the HUD keeps its own controller. The reset is automatic after that one-time setup.
 
+The reset restarts the USB composite parent first, then the HID and XUSB children, and writes `%TEMP%\sable-pad-reset.log`. A pending Windows reboot blocks USB device restarts; reboot once after a driver or Windows update if the log says “Device is pending system reboot”.
+
 ## Controls
 
 | Input | Action |

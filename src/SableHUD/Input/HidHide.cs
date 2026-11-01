@@ -174,9 +174,25 @@ public static class HidHide
             var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "SableHUD");
             Directory.CreateDirectory(dir);
             var script = Path.Combine(dir, "pad-reset.cmd");
-            var lines = new List<string> { "@echo off" };
-            foreach (var device in devices)
-                lines.Add($"\"{Pnputil}\" /restart-device \"{device}\"");
+
+            // The USB composite parent goes first: restarting it cycles every
+            // child interface, including the XUSB interface XInput reads. The
+            // children are kept as a fallback when the parent cannot restart.
+            var ordered = devices
+                .OrderByDescending(d => d.StartsWith(@"USB\", StringComparison.OrdinalIgnoreCase) &&
+                                        !d.Contains("&MI_", StringComparison.OrdinalIgnoreCase))
+                .ThenBy(d => d)
+                .ToList();
+
+            var lines = new List<string>
+            {
+                "@echo off",
+                "set LOG=%TEMP%\\sable-pad-reset.log",
+                "echo ==== %DATE% %TIME% ==== > \"%LOG%\"",
+            };
+            foreach (var device in ordered)
+                lines.Add($"\"{Pnputil}\" /restart-device \"{device}\" >> \"%LOG%\" 2>&1");
+            lines.Add("echo done >> \"%LOG%\"");
             lines.Add("exit /b 0");
             await File.WriteAllLinesAsync(script, lines).ConfigureAwait(false);
 
@@ -257,7 +273,7 @@ public static class HidHide
         if (item.TryGetProperty("present", out var present) && present.ValueKind == JsonValueKind.False)
             return;
 
-        foreach (var name in new[] { "deviceInstancePath", "xusbDeviceInstancePath" })
+        foreach (var name in new[] { "deviceInstancePath", "xusbDeviceInstancePath", "baseContainerDeviceInstancePath" })
         {
             if (!item.TryGetProperty(name, out var value)) continue;
             var path = value.GetString();

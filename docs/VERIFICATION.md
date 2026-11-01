@@ -76,12 +76,16 @@ Latest published run: exit `0`, `passed=true`.
   connected after the setting was enabled is picked up.
   Already-open apps keep the handle they hold: an open hardwaretester page kept the
   pad, while reloading that page with the HUD open dropped it to “Connect gamepad”.
-  This is HidHide filtering new device opens, not Sable. **Automatic pad reset** in
-  Settings installs a one-time highest-privilege scheduled task that restarts the
-  controller on every HUD open, closing those stale handles; it needs the pad
-  connected and one Windows admin prompt. The setup was not exercised in this session
-  because the controller went offline, but the non-elevated path correctly reports
-  “Connect the controller, then run this again”.
+  This is HidHide filtering new device opens, not Sable. **Automatic pad reset** is
+  installed and the task runs (Last Result 0); the protected script now restarts the
+  USB composite parent first, then HID and XUSB, and logs to `%TEMP%\sable-pad-reset.log`.
+  On this machine the HID gamepad restarted (`14:08:27`), but the parent and XUSB
+  returned `Device is pending system reboot to complete a previous operation` and
+  `This command is not supported on this OS product`; `PendingFileRenameOperations`
+  contains `gamingservicesproxy_13.dll` and `WRP3D09.tmp`. The XUSB path is the one
+  the tester uses, so the browser kept its handle. A reboot is required before the
+  reset can restart the parent/XUSB; if the same “not supported” message persists
+  after that, the reset needs a SetupAPI/devcon implementation instead of pnputil.
 - **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
   medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
   keep the player's capitalisation, and stat values use tabular figures.

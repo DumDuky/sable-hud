@@ -191,11 +191,20 @@ a one-time elevated setup. It writes a `pad-reset.cmd` in
 `%ProgramData%\SableHUD` with an admins-only write ACL and registers a manual,
 highest-privilege task (`SableHUD-PadReset`) whose only action is `cmd /c` that
 protected script. On show, after cloaking, Sable runs the task; `pnputil` is on the
-HidHide allowlist, so it can restart the HID and XUSB devices while they are cloaked.
+HidHide allowlist, so it can restart the devices while they are cloaked. The script
+restarts the **USB composite parent first**, then the HID and XUSB children, and logs
+to `%TEMP%\sable-pad-reset.log`. Restarting the parent cycles every child interface,
+including the XUSB interface XInput reads; the children are a fallback.
+
 The restart closes the old handles; the owning apps cannot reopen the device because
 the cloak is active. Sable reopens on its allowlisted path, and the overlay keeps
-working. `schtasks` and `pnputil` are the only privileged pieces; no elevated
+working. `schtasks`, `cmd` and `pnputil` are the only privileged pieces; no elevated
 service or user-writable executable is used.
+
+A pending Windows reboot blocks USB device restarts. `pnputil` reports “Device is
+pending system reboot to complete a previous operation”; the HID interface may still
+restart, but the parent and XUSB fail until Windows completes the operation, so the
+controller must be rebooted once after a driver or Windows update.
 
 ## Animations
 
