@@ -74,6 +74,13 @@ Latest published run: exit `0`, `passed=true`.
   1167 (no pad) while Sable still showed `Pad 1`; hiding the HUD uncloaked it and the
   reader saw the pad again. Devices are re-read every time the HUD opens, so a pad
   connected after the setting was enabled is picked up.
+  Already-open apps keep the handle they hold: an open hardwaretester page kept the
+  pad, while reloading that page with the HUD open dropped it to “Connect gamepad”.
+  This is HidHide filtering new device opens, not Sable; the Settings copy and the
+  first-open toast say so.
+- **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
+  medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
+  keep the player's capitalisation, and stat values use tabular figures.
 - **Output**: the Output button is part of the D-pad focus order (master → Output →
   mic → app rows), so routing no longer needs the mouse or X on a row.
 - **Mini player**: Top-right dock preset placed it correctly; Y/hotkey toggles it.

@@ -73,8 +73,8 @@
     </Style>
 
     <Style x:Key="Micro" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="9.5" />
-        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontWeight" Value="Medium" />
         <Setter Property="Foreground" Value="{DynamicResource TextDim}" />
         <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
     </Style>
@@ -84,6 +84,7 @@
         <Setter Property="FontSize" Value="22" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="{DynamicResource Text}" />
+        <Setter Property="Typography.NumeralAlignment" Value="Tabular" />
     </Style>
 
     <!-- ============================ surfaces ============================ -->

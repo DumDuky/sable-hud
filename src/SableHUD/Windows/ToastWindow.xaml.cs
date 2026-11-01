@@ -29,8 +29,8 @@ public partial class ToastWindow : Window
     {
         if (!snap.HasTrack) return;
 
-        ToastLabel.Text = "NOW PLAYING";
-        ToastSource.Text = snap.Source.ToUpperInvariant();
+        ToastLabel.Text = "Now playing";
+        ToastSource.Text = snap.Source;
         ToastTitle.Text = snap.Title;
         ToastArtist.Text = string.IsNullOrWhiteSpace(snap.Artist) ? snap.Album : snap.Artist;
         ToastProgress.Value = snap.Progress;
@@ -42,7 +42,7 @@ public partial class ToastWindow : Window
 
     public void ShowMessage(string text)
     {
-        ToastLabel.Text = "SABLE";
+        ToastLabel.Text = "Sable";
         ToastSource.Text = "";
         ToastTitle.Text = text;
         ToastArtist.Text = "";

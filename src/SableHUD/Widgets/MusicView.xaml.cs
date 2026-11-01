@@ -164,7 +164,7 @@ public partial class MusicView : HudPageBase
         var snap = Services.Demo ? Services.DemoMedia ?? MediaSnapshot.Empty : Services.Media.Current;
         var has = snap.HasTrack;
 
-        SourceText.Text = (snap.Kind == MediaKind.None ? "MEDIA" : snap.Source).ToUpperInvariant();
+        SourceText.Text = (snap.Kind == MediaKind.None ? "Media" : snap.Source);
         SourceDot.Opacity = snap.IsPlaying ? 1 : 0.3;
         StateText.Text = snap.Kind == MediaKind.None ? "Idle" : snap.IsPlaying ? "Playing" : "Paused";
 
@@ -191,21 +191,21 @@ public partial class MusicView : HudPageBase
         SideSource.Text = snap.Kind == MediaKind.None ? "Nothing yet" : snap.Source;
         if (snap.Kind == MediaKind.Local)
         {
-            SideLabel.Text = "NEXT UP";
+            SideLabel.Text = "Next up";
             var lib = Services.Media.Local.Library;
             var next = lib.Count > 1 ? lib[(Services.Media.Local.CurrentIndex + 1) % lib.Count] : null;
             SideDetail.Text = next is null ? "The library is quiet." : $"{next.Title}\n{next.Artist}";
         }
         else if (snap.Kind == MediaKind.System)
         {
-            SideLabel.Text = "ALBUM";
+            SideLabel.Text = "Album";
             SideDetail.Text = string.IsNullOrWhiteSpace(snap.Album)
                 ? $"{snap.Source} is playing outside the overlay."
                 : snap.Album;
         }
         else
         {
-            SideLabel.Text = "GET STARTED";
+            SideLabel.Text = "Get started";
             SideDetail.Text = "Play something in LiMusic, or point the HUD at a folder of your own music.";
         }
 

@@ -27,7 +27,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="SYSTEM VOLUME" Style="{StaticResource Micro}" />
+                    <TextBlock Text="System volume" Style="{StaticResource Micro}" />
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                         <TextBlock x:Name="MasterValue" Style="{StaticResource StatValue}" FontSize="26" Text="—" />
                         <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,9,0,0" />
@@ -39,7 +39,7 @@
                     <controls:HudProgress x:Name="MasterBar" Height="6"
                                           Track="{DynamicResource StrokeStrong}"
                                           Fill="{DynamicResource Text}" />
-                    <TextBlock x:Name="MasterHint" Text="click to mute · ◀ ▶ volume" Style="{StaticResource Dim}" Margin="0,7,0,0" FontSize="9.8" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="MasterHint" Text="Click to mute · ◀ ▶ volume" Style="{StaticResource Dim}" Margin="0,7,0,0" FontSize="9.8" TextTrimming="CharacterEllipsis" />
                 </StackPanel>
 
                 <Path x:Name="MasterIcon" Grid.Column="2"
@@ -51,7 +51,7 @@
         </controls:HudButton>
 
         <Grid Grid.Row="2">
-            <TextBlock Text="APP MIXER" Style="{StaticResource Micro}" VerticalAlignment="Center" />
+            <TextBlock Text="App mixer" Style="{StaticResource Micro}" VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <controls:HudButton x:Name="OutputButton"
                                     Height="34" CornerRadius="11" Padding="11,0" Margin="0,0,6,0"
@@ -73,7 +73,7 @@
                 <StackPanel x:Name="SessionRows" />
                 <TextBlock x:Name="NoSessions"
                            Style="{StaticResource Body}"
-                           Text="No apps are playing audio right now."
+                           Text="No apps are playing audio"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            FontSize="12" />

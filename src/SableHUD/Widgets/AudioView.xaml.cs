@@ -111,7 +111,7 @@ public partial class AudioView : HudPageBase
         MasterValue.Text = $"{s.Master * 100:0}";
         MasterBar.Value = s.Master;
         MasterState.Text = s.MasterMuted ? "muted" : "live";
-        MasterHint.Text = "click to mute · ◀ ▶ volume · " + s.DefaultDeviceName;
+        MasterHint.Text = "Click to mute · ◀ ▶ volume · " + s.DefaultDeviceName;
         MasterHint.ToolTip = s.DefaultDeviceName;
         MasterIcon.Data = Ui.Geo(s.MasterMuted ? "IconVolumeMute" : "IconVolume");
         MicButton.Content = s.MicAvailable ? (s.MicMuted ? "Mic muted" : "Mic live") : "No mic";

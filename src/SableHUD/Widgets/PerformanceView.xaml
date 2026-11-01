@@ -29,7 +29,7 @@
             <Border Style="{StaticResource Card}" Padding="14,12">
                 <Grid>
                     <StackPanel>
-                        <TextBlock Text="PROCESSOR" Style="{StaticResource Micro}" />
+                        <TextBlock Text="Processor" Style="{StaticResource Micro}" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <TextBlock x:Name="CpuValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
                             <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,10,0,0" />
@@ -46,7 +46,7 @@
             <Border Grid.Column="2" Style="{StaticResource Card}" Padding="14,12">
                 <Grid>
                     <StackPanel>
-                        <TextBlock Text="GRAPHICS" Style="{StaticResource Micro}" />
+                        <TextBlock Text="Graphics" Style="{StaticResource Micro}" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <TextBlock x:Name="GpuValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
                             <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,10,0,0" />
@@ -63,7 +63,7 @@
             <Border Grid.Column="4" Style="{StaticResource Card}" Padding="14,12">
                 <Grid>
                     <StackPanel>
-                        <TextBlock Text="MEMORY" Style="{StaticResource Micro}" />
+                        <TextBlock Text="Memory" Style="{StaticResource Micro}" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <TextBlock x:Name="RamValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
                             <TextBlock Text="%" Style="{StaticResource Dim}" Margin="3,10,0,0" />
@@ -80,7 +80,7 @@
             <Border Grid.Column="6" Style="{StaticResource Card}" Padding="14,12">
                 <Grid>
                     <StackPanel>
-                        <TextBlock Text="FRAMES" Style="{StaticResource Micro}" />
+                        <TextBlock Text="Frames" Style="{StaticResource Micro}" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <TextBlock x:Name="FpsValue" Style="{StaticResource StatValue}" FontSize="30" Text="—" />
                             <TextBlock Text="fps" Style="{StaticResource Dim}" Margin="4,10,0,0" />
@@ -116,7 +116,7 @@
                         <Border Width="24" Height="24" CornerRadius="8" Background="{DynamicResource BgSoft}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1">
                             <Path Data="{StaticResource IconGamepad}" Fill="{DynamicResource TextMuted}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
-                        <TextBlock Text="FOREGROUND" Style="{StaticResource Micro}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Foreground" Style="{StaticResource Micro}" Margin="8,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" VerticalAlignment="Center">
@@ -138,7 +138,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Text="NETWORK" Style="{StaticResource Micro}" />
+                    <TextBlock Text="Network" Style="{StaticResource Micro}" />
                     <Grid Grid.Row="1" Margin="0,9,0,0">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="{StaticResource IconChevronDown}" Fill="{DynamicResource Text}" Width="8" Height="8" Stretch="Uniform" VerticalAlignment="Center" />
@@ -169,7 +169,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Text="SESSION" Style="{StaticResource Micro}" />
+                    <TextBlock Text="Session" Style="{StaticResource Micro}" />
                     <StackPanel Grid.Row="1" Margin="0,8,0,0">
                         <TextBlock x:Name="BigSession" Style="{StaticResource StatValue}" FontSize="21" Text="0m" />
                         <TextBlock Text="with Sable open" Style="{StaticResource Dim}" Margin="0,2,0,0" />

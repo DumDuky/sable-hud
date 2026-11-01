@@ -166,14 +166,25 @@ Logs: `%APPDATA%\SableHUD\sable.log`. Settings are never written to the program 
 the installer and, after a reboot, prepare the configuration:
 
 1. `HidHideCLI --app-reg <SableHUD.exe>` allowlists the HUD
-2. `--dev-gaming` returns gaming HID devices; their `deviceInstancePath` and
-   `xusbDeviceInstancePath` are added with `--dev-hide`
-3. `--inv-off` and `--cloak-off`
+2. `--dev-gaming` returns gaming HID groups; the present `gamingDevice` entries are
+   collected from each group's `devices` array with `--dev-hide`
+3. HID gamepads also expose an XUSB (XnaComposite) interface that `--dev-gaming`
+   does not list. Sable finds it in
+   `HKLM\SYSTEM\CurrentControlSet\Enum\USB` by vendor/product and `Service=xusb*`,
+   and hides that instance too, otherwise XInput games still see the pad
+4. `--inv-off` and `--cloak-off`
 
-When the HUD is shown, `--cloak-on` hides those devices from every process except
-Sable; when it hides, `--cloak-off` restores them. Startup and normal exit always
-uncloak. A crash can leave cloaking on until Sable is run again or
-`HidHideCLI --cloak-off` is called.
+The device list is rebuilt every time the HUD opens, so a pad connected after the
+setting was enabled is picked up. When the HUD is shown, `--cloak-on` hides those
+devices from every process except Sable; when it hides, `--cloak-off` restores them.
+Startup and normal exit always uncloak. A crash can leave cloaking on until Sable is
+run again or `HidHideCLI --cloak-off` is called.
+
+HidHide filters **new device opens**, not handles that already exist. An app or
+browser page that opened the controller before the HUD keeps receiving input until
+it restarts or reloads; apps that open the pad after the HUD is up are isolated.
+This is why a game should be launched with the HUD already open, and why reloading a
+browser gamepad tester is enough to see the pad disappear.
 
 ## Animations
 

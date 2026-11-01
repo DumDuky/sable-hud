@@ -21,6 +21,7 @@ public partial class App : Application
     private volatile bool _listening;
 
     private readonly System.Threading.SemaphoreSlim _isolationGate = new(1, 1);
+    private bool _isolationHintShown;
     private OverlayWindow? _overlay;
     private MiniPlayerWindow? _mini;
     private ToastWindow? _toast;
@@ -404,7 +405,14 @@ public partial class App : Application
             }
 
             if (_overlay?.IsShown == true)
+            {
                 await HidHide.SetCloakAsync(true).ConfigureAwait(true);
+                if (!_isolationHintShown)
+                {
+                    _isolationHintShown = true;
+                    Hud.Toast("Pad hidden · reload apps that were already open");
+                }
+            }
         }
         catch (Exception ex)
         {

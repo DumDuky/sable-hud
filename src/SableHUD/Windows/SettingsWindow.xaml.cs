@@ -459,7 +459,7 @@ public partial class SettingsWindow : Window
             });
 
         AddRow("Isolate pad while HUD is open",
-            "Uses HidHide to hide the controller from games while the overlay is up, so HUD navigation does not leak into gameplay. Sable is allowlisted.",
+            "Hides the controller from games while the overlay is up. Apps opened after the HUD is up are isolated; an app that already opened the controller keeps it until it restarts or reloads. Sable is allowlisted.",
             Services.Settings.IsolateController ? "On" : "Off",
             () => _ = ToggleIsolationAsync(),
             toggle: Services.Settings.IsolateController);
@@ -492,7 +492,7 @@ public partial class SettingsWindow : Window
 
             Services.Settings.IsolateController = true;
             Services.Save();
-            Hud.Toast(message);
+            Hud.Toast(message + " · Reload apps that were already open");
         }
         else
         {
@@ -670,7 +670,7 @@ public partial class SettingsWindow : Window
             "Music is built around LiMusic. LiMusic publishes its now-playing state to Windows (SMTC), so Sable can show artwork, seek, and play or skip without embedding the whole Tauri app. The music widget is a stripped-down, controller-sized take on that player; LiMusic itself still owns search, library and streaming.",
             "You can also point Sable at a folder of your own music. MP3, FLAC, M4A and WAV are read through Media Foundation and tagged with TagLib.",
             "FPS comes from RivaTuner Statistics Server's shared memory when RTSS is running. Sable never injects into a game.",
-            "Windows broadcasts controller input to every app. While the HUD is open, the game may still see D-pad and face-button presses. Borderless fullscreen keeps the overlay visible; a HidHide profile can isolate the pad if a particular game reacts.",
+            "Windows broadcasts controller input to every app. HidHide can hide the pad while the HUD is open, but an app that already opened the controller keeps it until it restarts or reloads. Borderless fullscreen keeps the overlay visible.",
         };
 
         foreach (var text in paragraphs)

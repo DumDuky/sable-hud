@@ -65,7 +65,7 @@
                             VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Ellipse x:Name="SourceDot" Width="5" Height="5" Fill="{DynamicResource Text}" VerticalAlignment="Center" />
-                            <TextBlock x:Name="SourceText" Style="{StaticResource Micro}" Margin="7,1,0,0" Text="MEDIA" />
+                            <TextBlock x:Name="SourceText" Style="{StaticResource Micro}" Margin="7,1,0,0" Text="Media" />
                         </StackPanel>
                     </Border>
                     <TextBlock x:Name="StateText" Style="{StaticResource Dim}" Margin="10,0,0,0" VerticalAlignment="Center" Text="Idle" />
@@ -130,11 +130,11 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="SOURCE" Style="{StaticResource Micro}" />
+                    <TextBlock Text="Source" Style="{StaticResource Micro}" />
                     <TextBlock x:Name="SideSource" Grid.Row="1" Style="{StaticResource Heading}" FontSize="17" Margin="0,5,0,0" Text="—" />
                     <Border Grid.Row="2" Style="{StaticResource Divider}" Margin="0,12,0,0" />
                     <StackPanel Grid.Row="3" Margin="0,12,0,0">
-                        <TextBlock x:Name="SideLabel" Text="NEXT UP" Style="{StaticResource Micro}" />
+                        <TextBlock x:Name="SideLabel" Text="Next up" Style="{StaticResource Micro}" />
                         <TextBlock x:Name="SideDetail" Style="{StaticResource Body}" FontSize="12" Margin="0,5,0,0" Text="Start a track to see more." TextWrapping="Wrap" />
                     </StackPanel>
 

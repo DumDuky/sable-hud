@@ -54,8 +54,8 @@
 
                 <StackPanel Grid.Column="2" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="ToastLabel" Text="NOW PLAYING" Style="{StaticResource Micro}" FontSize="8.5" VerticalAlignment="Center" />
-                        <TextBlock x:Name="ToastSource" Text="LIMUSIC" Style="{StaticResource Micro}" FontSize="8.5" Foreground="{DynamicResource TextMuted}" Margin="7,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock x:Name="ToastLabel" Text="Now playing" Style="{StaticResource Micro}" FontSize="8.5" VerticalAlignment="Center" />
+                        <TextBlock x:Name="ToastSource" Text="LiMusic" Style="{StaticResource Micro}" FontSize="8.5" Foreground="{DynamicResource TextMuted}" Margin="7,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                     <TextBlock x:Name="ToastTitle" Text="Track" FontSize="12.5" FontWeight="SemiBold" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
                     <TextBlock x:Name="ToastArtist" Text="Artist" FontSize="9.8" Foreground="{DynamicResource TextDim}" Margin="0,1,0,0" TextTrimming="CharacterEllipsis" />
