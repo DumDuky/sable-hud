@@ -69,6 +69,33 @@ public static class HidHide
         }
     }
 
+    private static string Pnputil => Path.Combine(Environment.SystemDirectory, "pnputil.exe");
+
+    public static async Task<List<string>> BuildDeviceListAsync()
+    {
+        var devices = new List<string>();
+        if (!IsInstalled) return devices;
+
+        var inventory = await RunAsync("--dev-gaming").ConfigureAwait(false);
+        if (!inventory.Ok) return devices;
+
+        try
+        {
+            using var doc = JsonDocument.Parse(inventory.Output);
+            if (doc.RootElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var group in doc.RootElement.EnumerateArray())
+                    CollectGamingDevices(group, devices);
+            }
+            AddXusbDevices(devices);
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("HidHide inventory parse: " + ex.Message);
+        }
+        return devices;
+    }
+
     public static async Task<(bool Ok, string Message)> PrepareAsync()
     {
         if (!IsInstalled) return (false, "HidHide is not installed");
@@ -79,27 +106,8 @@ public static class HidHide
             if (string.IsNullOrWhiteSpace(exe) || Path.GetFileName(exe).Equals("dotnet.exe", StringComparison.OrdinalIgnoreCase))
                 return (false, "Run the packaged SableHUD.exe so the driver can allowlist it");
 
-            var inventory = await RunAsync("--dev-gaming").ConfigureAwait(false);
-            var devices = new List<string>();
-            if (inventory.Ok)
-            {
-                try
-                {
-                    using var doc = JsonDocument.Parse(inventory.Output);
-                    if (doc.RootElement.ValueKind == JsonValueKind.Array)
-                    {
-                        foreach (var group in doc.RootElement.EnumerateArray())
-                            CollectGamingDevices(group, devices);
-                    }
-                    AddXusbDevices(devices);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warn("HidHide inventory parse: " + ex.Message);
-                }
-            }
-
-            var args = new List<string> { "--app-reg", exe, "--inv-off", "--cloak-off" };
+            var devices = await BuildDeviceListAsync().ConfigureAwait(false);
+            var args = new List<string> { "--app-reg", exe, "--app-reg", Pnputil, "--inv-off", "--cloak-off" };
             foreach (var device in devices)
             {
                 args.Add("--dev-hide");
@@ -114,6 +122,84 @@ public static class HidHide
         catch (Exception ex)
         {
             Log.Warn("HidHide prepare: " + ex.Message);
+            return (false, ex.Message);
+        }
+    }
+
+    public static bool PadResetTaskExists()
+    {
+        if (!IsInstalled) return false;
+        try
+        {
+            using var process = Process.Start(new ProcessStartInfo("schtasks.exe", "/query /tn SableHUD-PadReset")
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            });
+            if (process is null) return false;
+            if (!process.WaitForExit(2500))
+            {
+                try { process.Kill(); } catch { }
+                return false;
+            }
+            return process.ExitCode == 0;
+        }
+        catch { return false; }
+    }
+
+    public static async Task<bool> RunPadResetAsync()
+    {
+        if (!PadResetTaskExists()) return false;
+        var result = await RunToolAsync("schtasks.exe", "/run", "/tn", "SableHUD-PadReset").ConfigureAwait(false);
+        if (!result.Ok)
+        {
+            Log.Warn("pad reset: " + Clean(result.Error));
+            return false;
+        }
+        await Task.Delay(1000).ConfigureAwait(false);
+        return true;
+    }
+
+    public static async Task<(bool Ok, string Message)> InstallPadResetAsync()
+    {
+        if (!IsInstalled) return (false, "HidHide is not installed");
+        var devices = await BuildDeviceListAsync().ConfigureAwait(false);
+        if (devices.Count == 0) return (false, "Connect the controller, then run this again");
+        if (string.IsNullOrWhiteSpace(Paths.ExePath)) return (false, "Sable path is unavailable");
+
+        try
+        {
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "SableHUD");
+            Directory.CreateDirectory(dir);
+            var script = Path.Combine(dir, "pad-reset.cmd");
+            var lines = new List<string> { "@echo off" };
+            foreach (var device in devices)
+                lines.Add($"\"{Pnputil}\" /restart-device \"{device}\"");
+            lines.Add("exit /b 0");
+            await File.WriteAllLinesAsync(script, lines).ConfigureAwait(false);
+
+            var acl = await RunToolAsync("icacls.exe", dir, "/inheritance:r",
+                "/grant:r", "*S-1-5-32-544:(OI)(CI)F",
+                "*S-1-5-18:(OI)(CI)F",
+                "*S-1-5-32-545:(OI)(CI)RX").ConfigureAwait(false);
+            if (!acl.Ok) return (false, "Could not protect the reset script: " + Clean(acl.Error));
+
+            await RunAsync("--app-reg", Pnputil).ConfigureAwait(false);
+            var action = $"cmd.exe /c \"{script}\"";
+            var result = await RunToolAsync("schtasks.exe", "/create", "/f",
+                "/tn", "SableHUD-PadReset",
+                "/tr", action,
+                "/sc", "once", "/st", "00:00",
+                "/rl", "HIGHEST").ConfigureAwait(false);
+            return result.Ok
+                ? (true, $"Automatic pad reset ready for {devices.Count} device(s)")
+                : (false, Clean(result.Error));
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("pad reset setup: " + ex.Message);
             return (false, ex.Message);
         }
     }
@@ -201,12 +287,14 @@ public static class HidHide
         return result.Ok && result.Output.Contains("--cloak-on", StringComparison.OrdinalIgnoreCase);
     }
 
-    private static async Task<(bool Ok, string Output, string Error)> RunAsync(params string[] args)
+    private static Task<(bool Ok, string Output, string Error)> RunAsync(params string[] args) =>
+        RunToolAsync(CliPath, args);
+
+    private static async Task<(bool Ok, string Output, string Error)> RunToolAsync(string file, params string[] args)
     {
-        if (!IsInstalled) return (false, "", "HidHide is not installed");
         try
         {
-            var info = new ProcessStartInfo(CliPath)
+            var info = new ProcessStartInfo(file)
             {
                 UseShellExecute = false,
                 CreateNoWindow = true,
@@ -216,13 +304,13 @@ public static class HidHide
             foreach (var arg in args) info.ArgumentList.Add(arg);
 
             using var process = Process.Start(info);
-            if (process is null) return (false, "", "could not start HidHideCLI");
+            if (process is null) return (false, "", "could not start " + Path.GetFileName(file));
 
             var stdout = process.StandardOutput.ReadToEndAsync();
             var stderr = process.StandardError.ReadToEndAsync();
             var exitTask = process.WaitForExitAsync();
             var finished = await Task.WhenAny(exitTask, Task.Delay(10_000)).ConfigureAwait(false);
-            if (finished != exitTask) return (false, "", "HidHideCLI timed out");
+            if (finished != exitTask) return (false, "", Path.GetFileName(file) + " timed out");
 
             var output = await stdout.ConfigureAwait(false);
             var error = await stderr.ConfigureAwait(false);

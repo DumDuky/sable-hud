@@ -41,6 +41,23 @@ public partial class App : Application
 
         var args = e.Args;
 
+        if (Has(args, "--install-pad-reset"))
+        {
+            var ok = false;
+            try
+            {
+                var result = HidHide.InstallPadResetAsync().GetAwaiter().GetResult();
+                ok = result.Ok;
+                if (!ok) Log.Warn("pad reset setup: " + result.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("pad reset setup: " + ex.Message);
+            }
+            Shutdown(ok ? 0 : 1);
+            return;
+        }
+
         if (Has(args, "--selftest"))
         {
             var ok = false;
@@ -407,10 +424,16 @@ public partial class App : Application
             if (_overlay?.IsShown == true)
             {
                 await HidHide.SetCloakAsync(true).ConfigureAwait(true);
+                var restarted = await HidHide.RunPadResetAsync().ConfigureAwait(true);
+                if (restarted)
+                    await HidHide.SetCloakAsync(true).ConfigureAwait(true);
+
                 if (!_isolationHintShown)
                 {
                     _isolationHintShown = true;
-                    Hud.Toast("Pad hidden · reload apps that were already open");
+                    Hud.Toast(restarted
+                        ? "Controller restarted · apps cut off"
+                        : "Pad hidden · set up automatic reset for running apps");
                 }
             }
         }

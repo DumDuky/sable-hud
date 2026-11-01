@@ -186,6 +186,17 @@ it restarts or reloads; apps that open the pad after the HUD is up are isolated.
 This is why a game should be launched with the HUD already open, and why reloading a
 browser gamepad tester is enough to see the pad disappear.
 
+For apps that were already running, **Settings → General → Automatic pad reset** does
+a one-time elevated setup. It writes a `pad-reset.cmd` in
+`%ProgramData%\SableHUD` with an admins-only write ACL and registers a manual,
+highest-privilege task (`SableHUD-PadReset`) whose only action is `cmd /c` that
+protected script. On show, after cloaking, Sable runs the task; `pnputil` is on the
+HidHide allowlist, so it can restart the HID and XUSB devices while they are cloaked.
+The restart closes the old handles; the owning apps cannot reopen the device because
+the cloak is active. Sable reopens on its allowlisted path, and the overlay keeps
+working. `schtasks` and `pnputil` are the only privileged pieces; no elevated
+service or user-writable executable is used.
+
 ## Animations
 
 The overlay enters from above over 460 ms with a quintic ease, fades over 280 ms and

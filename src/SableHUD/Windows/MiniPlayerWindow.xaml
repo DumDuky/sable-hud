@@ -23,9 +23,6 @@
                 Background="{DynamicResource BgGradient}"
                 BorderBrush="{DynamicResource Stroke}"
                 BorderThickness="1">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="24" ShadowDepth="6" Direction="270" Opacity="0.45" Color="#000000" />
-            </Border.Effect>
 
             <Grid Margin="10,9">
                 <Grid.ColumnDefinitions>
@@ -39,7 +36,7 @@
                     <Grid>
                         <Border CornerRadius="11">
                             <Border.Background>
-                                <ImageBrush x:Name="MiniArt" Stretch="UniformToFill" />
+                                <ImageBrush x:Name="MiniArt" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Border.Background>
                         </Border>
                         <Grid x:Name="MiniArtFallback">

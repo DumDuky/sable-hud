@@ -76,8 +76,12 @@ Latest published run: exit `0`, `passed=true`.
   connected after the setting was enabled is picked up.
   Already-open apps keep the handle they hold: an open hardwaretester page kept the
   pad, while reloading that page with the HUD open dropped it to “Connect gamepad”.
-  This is HidHide filtering new device opens, not Sable; the Settings copy and the
-  first-open toast say so.
+  This is HidHide filtering new device opens, not Sable. **Automatic pad reset** in
+  Settings installs a one-time highest-privilege scheduled task that restarts the
+  controller on every HUD open, closing those stale handles; it needs the pad
+  connected and one Windows admin prompt. The setup was not exercised in this session
+  because the controller went offline, but the non-elevated path correctly reports
+  “Connect the controller, then run this again”.
 - **UI polish**: micro labels moved from shouting caps to sentence case at 10 px
   medium (`System volume`, `Source`, `Album`, `Processor`), the LiMusic pill and toast
   keep the player's capitalisation, and stat values use tabular figures.

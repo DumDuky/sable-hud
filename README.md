@@ -86,7 +86,7 @@ Screenshot without the HUD in it, microphone mute, the Windows sound mixer, the 
 
 Windows sends controller input to every app. If a game reacts while the HUD is open, install the bundled **HidHide** driver from **Settings → General** and turn on **Isolate pad while HUD is open**. Sable hides both the HID gamepad and its XUSB interface only while the HUD is visible. Nothing installs or cloaks unless you choose it, and a reboot always releases the controller.
 
-HidHide filters new device opens, so isolation applies to apps that open the controller **after** the HUD is up. An app or browser page that already opened the controller keeps it until it restarts or reloads; reloading the page is enough for a browser tester. The HUD re-reads the controller devices every time it opens, so a pad connected later is picked up.
+HidHide filters new device opens, so on its own it isolates apps that open the controller **after** the HUD is up. For a game or browser page that was already running, set up **Automatic pad reset** once in **Settings → General** (one Windows admin prompt). Sable then restarts the controller as the HUD opens, which closes the old handle; the dead app cannot reopen it while Sable is cloaked, so it stops receiving input. Sable and `pnputil` are allowlisted, so the HUD keeps its own controller. The reset is automatic after that one-time setup.
 
 ## Controls
 

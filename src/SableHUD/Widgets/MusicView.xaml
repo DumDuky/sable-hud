@@ -25,7 +25,7 @@
                 <Grid>
                     <Border CornerRadius="21">
                         <Border.Background>
-                            <ImageBrush x:Name="ArtBrush" Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Center" />
+                            <ImageBrush x:Name="ArtBrush" Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Center" RenderOptions.BitmapScalingMode="HighQuality" />
                         </Border.Background>
                     </Border>
                     <Grid x:Name="ArtFallback">
