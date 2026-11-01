@@ -79,7 +79,9 @@ Latest published run: exit `0`, `passed=true`.
     with the real pad still hidden. Closing the HUD restored forwarding.
   So a game using the virtual pad stops receiving input the moment the HUD opens,
   without a device restart, reload or console window. The browser gamepad tester
-  showed the same result once reloaded.
+  showed the same result in a browser that was started after Sable. A browser that was
+  already open keeps the real pad in its browser process, so it has to be restarted
+  rather than reloaded.
 - **One-time switch**: a game already running before the virtual pad appeared holds the
   real pad handle and must be restarted once. Games launched after Sable see only the
   virtual pad. The same applies to an open browser tester once.

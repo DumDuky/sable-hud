@@ -94,7 +94,7 @@ Windows sends controller input to every app. Sable's isolation uses two drivers:
 - Install **ViGEmBus** once from <https://github.com/nefarius/ViGEmBus/releases> if it is not already present.
 - Turn on **Isolate pad while HUD is open**, then restart Sable so the virtual pad starts.
 
-A game that was already running before the virtual pad appeared has the real pad handle and must be restarted once; games launched after Sable starts see the virtual pad and work with the HUD immediately. The browser gamepad tester must be reloaded once for the same reason.
+A game that was already running before the virtual pad appeared has the real pad handle and must be restarted once; games launched after Sable starts see the virtual pad and work with the HUD immediately. The same applies to a **browser**, and a reload is not enough: the gamepad handle belongs to the browser process, so the browser itself has to quit and start again. Any app that was already open when Sable started keeps the real pad until it restarts.
 
 Exiting Sable disconnects the virtual pad and releases the real one. A watchdog process also releases HidHide if Sable stops unexpectedly, and the tray/Settings have **Release controller**.
 
